@@ -1,0 +1,676 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050608">
+<title>Send a Package | SWARM</title>
+
+<style>
+:root {
+  --bg:#050608;
+  --surface:rgba(18,22,28,.78);
+  --green:#00FF66;
+  --muted:#8B9BB4;
+  --border:rgba(255,255,255,.09);
+  --radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:white;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;padding-bottom:100px;
+}
+body:before{
+  content:"";position:fixed;inset:0;z-index:-1;
+  background:
+  radial-gradient(circle at 50% 0%,rgba(0,255,102,.09),transparent 50%),
+  repeating-linear-gradient(45deg,#111 0px,#111 1px,transparent 1px,transparent 12px);
+  opacity:.4;
+}
+.container{max-width:520px;margin:auto;padding:0 20px}
+header{
+  height:78px;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--border);
+}
+.logo{font-size:20px;font-weight:900;letter-spacing:4px}
+.logo span{color:var(--green)}
+.back{color:var(--muted);text-decoration:none;font-size:13px}
+.hero{padding:30px 0 24px}
+.eyebrow{
+  color:var(--green);font-size:10px;font-weight:800;
+  letter-spacing:2px;margin-bottom:12px;
+}
+h1{font-size:34px;line-height:1.15;margin-bottom:12px}
+h1 span{color:var(--green)}
+.hero p{color:var(--muted);font-size:14px;line-height:1.6}
+.progress{display:flex;gap:7px;margin:20px 0 26px}
+.progress div{
+  height:4px;flex:1;border-radius:10px;background:#252A30;
+}
+.progress div.active{background:var(--green)}
+.section{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:21px;margin-bottom:16px;
+  box-shadow:inset 0 1px rgba(255,255,255,.04);
+}
+.section-head{
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.number{
+  width:30px;height:30px;border-radius:10px;
+  background:rgba(0,255,102,.1);color:var(--green);
+  display:grid;place-items:center;font-size:13px;font-weight:800;
+}
+h2{font-size:16px}
+.section-head small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.field{margin-bottom:15px}
+.field:last-child{margin-bottom:0}
+label{
+  display:block;color:#CBD3DE;font-size:12px;
+  font-weight:600;margin-bottom:8px;
+}
+input,select,textarea{
+  width:100%;background:#0A0D11;border:1px solid var(--border);
+  color:white;padding:14px;border-radius:11px;
+  font:inherit;font-size:13px;outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--green);box-shadow:0 0 0 2px rgba(0,255,102,.08);
+}
+input::placeholder,textarea::placeholder{color:#566173}
+select option{background:#10151A}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.method{
+  border:1px solid var(--border);background:#0A0D11;
+  padding:17px 12px;border-radius:14px;cursor:pointer;
+  transition:.2s;text-align:left;color:white;width:100%;
+}
+.method.selected{
+  border-color:var(--green);
+  background:rgba(0,255,102,.07);
+  box-shadow:inset 0 0 15px rgba(0,255,102,.04);
+}
+.method-icon{font-size:25px;margin-bottom:12px}
+.method strong{display:block;font-size:14px;margin-bottom:5px}
+.method small{font-size:11px;color:var(--muted)}
+.method.selected strong{color:var(--green)}
+.choice-note{color:var(--muted);font-size:11px;margin-top:12px;line-height:1.5}
+.estimate{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 0;border-top:1px solid var(--border);
+  margin-top:16px;gap:10px;
+}
+.estimate span{color:var(--muted);font-size:12px}
+.estimate strong{font-size:24px;color:var(--green)}
+.button{
+  display:block;width:100%;padding:16px;border:0;border-radius:13px;
+  background:var(--green);color:#001A09;font-size:13px;
+  font-weight:900;letter-spacing:1px;cursor:pointer;
+}
+.button:active{transform:scale(.98)}
+.secondary{
+  background:transparent;border:1px solid var(--border);
+  color:white;margin-top:10px;
+}
+.notice{
+  color:var(--muted);font-size:10px;line-height:1.5;
+  text-align:center;margin:15px 5px;
+}
+.hidden{display:none!important}
+.summary-row{
+  display:flex;justify-content:space-between;gap:15px;
+  padding:12px 0;border-bottom:1px solid var(--border);
+  font-size:12px;
+}
+.summary-row:last-child{border-bottom:0}
+.summary-row span:first-child{color:var(--muted)}
+.summary-row strong{text-align:right;overflow-wrap:anywhere}
+.success{text-align:center;padding:35px 10px}
+.success-icon{
+  width:65px;height:65px;margin:0 auto 20px;
+  display:grid;place-items:center;border:1px solid var(--green);
+  color:var(--green);border-radius:50%;font-size:30px;
+  box-shadow:0 0 25px rgba(0,255,102,.12);
+}
+.saved-address{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;margin-top:9px;padding:11px 12px;
+  background:rgba(0,255,102,.06);
+  border:1px solid rgba(0,255,102,.18);
+  border-radius:11px;
+}
+.saved-address p{font-size:11px;color:var(--green);line-height:1.5}
+.clear-address{
+  background:transparent;border:0;color:var(--muted);
+  font-size:10px;text-decoration:underline;padding:5px;
+}
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(10,13,17,.95);backdrop-filter:blur(15px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;
+  padding:15px 10px calc(15px + env(safe-area-inset-bottom));
+  z-index:5;
+}
+.bottom-nav a{
+  text-decoration:none;color:var(--muted);
+  font-size:11px;text-align:center;
+}
+.bottom-nav a.active{color:var(--green)}
+@media(max-width:360px){
+  h1{font-size:29px}
+  .section{padding:16px}
+  .summary-row{gap:8px}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <div class="logo">SW<span>A</span>RM</div>
+  <a href="index.html" class="back">← Back to Home</a>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">SWARM LOGISTICS / NEW SHIPMENT</div>
+  <h1>Move something.<br><span>We'll take it.</span></h1>
+  <p>Enter your shipment details and choose your preferred aerial delivery method.</p>
+</section>
+
+<div class="progress">
+  <div class="active" id="p1"></div>
+  <div id="p2"></div>
+  <div id="p3"></div>
+</div>
+
+<form id="shipmentForm">
+
+<section class="section">
+  <div class="section-head">
+    <div class="number">01</div>
+    <div>
+      <h2>Route details</h2>
+      <small>Where should we collect and deliver?</small>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="pickup">COLLECTION ADDRESS</label>
+    <input id="pickup" required placeholder="Enter collection address">
+    <div id="savedAddressNotice" class="saved-address hidden">
+      <p id="savedAddressText">Saved address applied from your account.</p>
+      <button type="button" class="clear-address" id="clearAddressBtn">Change</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="destination">DESTINATION ADDRESS</label>
+    <input id="destination" required placeholder="Enter delivery address">
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <div class="number">02</div>
+    <div>
+      <h2>People & contact</h2>
+      <small>Who is sending and receiving?</small>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="sender">SENDER NAME</label>
+    <input id="sender" required placeholder="Full name">
+  </div>
+
+  <div class="field">
+    <label for="senderPhone">SENDER PHONE</label>
+    <input id="senderPhone" type="tel" required placeholder="+27">
+  </div>
+
+  <div class="field">
+    <label for="recipient">RECIPIENT NAME</label>
+    <input id="recipient" required placeholder="Full name">
+  </div>
+
+  <div class="field">
+    <label for="recipientPhone">RECIPIENT PHONE</label>
+    <input id="recipientPhone" type="tel" required placeholder="+27">
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <div class="number">03</div>
+    <div>
+      <h2>Package information</h2>
+      <small>Tell us what is travelling.</small>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="package">PACKAGE CATEGORY</label>
+    <select id="package" required>
+      <option value="">Select package type</option>
+      <option>Documents</option>
+      <option>Small parcel</option>
+      <option>Electronics</option>
+      <option>Food / Essentials</option>
+      <option>Medical supplies</option>
+      <option>Other permitted goods</option>
+    </select>
+  </div>
+
+  <div class="grid">
+    <div class="field">
+      <label for="weight">WEIGHT (KG)</label>
+      <input id="weight" type="number" min=".1" max="20" step=".1" required placeholder="e.g. 1.5">
+    </div>
+
+    <div class="field">
+      <label for="size">PACKAGE SIZE</label>
+      <select id="size" required>
+        <option value="">Select size</option>
+        <option>Small</option>
+        <option>Medium</option>
+        <option>Large</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="notes">SPECIAL INSTRUCTIONS (OPTIONAL)</label>
+    <textarea id="notes" rows="3" placeholder="Fragile, handling instructions..."></textarea>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <div class="number">04</div>
+    <div>
+      <h2>Delivery method</h2>
+      <small>Choose your preferred transport.</small>
+    </div>
+  </div>
+
+  <div class="grid">
+    <button type="button" class="method selected" data-method="Drone">
+      <div class="method-icon">✦</div>
+      <strong>Drone</strong>
+      <small>Aerial point-to-point delivery</small>
+    </button>
+
+    <button type="button" class="method" data-method="Zipline">
+      <div class="method-icon">⌁</div>
+      <strong>Zipline</strong>
+      <small>Cable-based pod transport</small>
+    </button>
+  </div>
+
+  <p class="choice-note">
+    Transport availability depends on the route, infrastructure, weather,
+    package limits and operational approval. Selection is a preference,
+    not a confirmed dispatch.
+  </p>
+
+  <div class="field" style="margin-top:18px">
+    <label for="priority">DELIVERY PRIORITY</label>
+    <select id="priority">
+      <option value="Standard">Standard delivery</option>
+      <option value="Express">Express delivery</option>
+    </select>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <div class="number">05</div>
+    <div>
+      <h2>Shipment estimate</h2>
+      <small>Illustrative estimate, subject to confirmation.</small>
+    </div>
+  </div>
+
+  <div class="estimate">
+    <span>Estimated shipment cost</span>
+    <strong id="price">R --</strong>
+  </div>
+
+  <p class="choice-note">
+    A final quote requires route distance, package dimensions, availability
+    and operational pricing. No payment is taken on this demo page.
+  </p>
+
+  <button class="button" type="button" id="reviewBtn">
+    REVIEW SHIPMENT →
+  </button>
+</section>
+
+</form>
+
+<section class="section hidden" id="review">
+  <div class="section-head">
+    <div class="number">✓</div>
+    <div>
+      <h2>Review your shipment</h2>
+      <small>Check the information before proceeding.</small>
+    </div>
+  </div>
+
+  <div id="summary"></div>
+
+  <button class="button" id="confirmBtn" type="button">
+    SUBMIT SHIPMENT REQUEST
+  </button>
+
+  <button class="button secondary" id="editBtn" type="button">
+    EDIT DETAILS
+  </button>
+</section>
+
+<section class="section hidden" id="success">
+  <div class="success">
+    <div class="success-icon">✓</div>
+    <h2>Request recorded.</h2>
+
+    <p class="choice-note">
+      Your demo shipment request has been saved in this browser.
+      No drone or zipline has been dispatched.
+    </p>
+
+    <div class="estimate">
+      <span>Reference</span>
+      <strong id="reference" style="font-size:17px"></strong>
+    </div>
+
+    <button class="button" id="trackNewShipmentBtn" type="button">
+      TRACK THIS SHIPMENT
+    </button>
+
+    <button class="button secondary" id="homeBtn" type="button">
+      BACK HOME
+    </button>
+  </div>
+</section>
+
+<p class="notice">
+  SWARM AERIAL LOGISTICS · Safe, smart and responsible delivery.
+</p>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="index.html">⌂<br>Home</a>
+  <a href="send.html" class="active">＋<br>Send</a>
+  <a href="track.html">◎<br>Track</a>
+  <a href="history.html">◷<br>History</a>
+</nav>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let selectedMethod = "Drone";
+let lastCreatedReference = "";
+let savedAddressApplied = false;
+
+// Safely read local storage.
+function readStorage(key, fallback){
+  try{
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  }catch(error){
+    return fallback;
+  }
+}
+
+// Get an address from the Account page.
+// Supports either a plain text address or an address object.
+function getAddressText(value){
+  if(!value) return "";
+
+  if(typeof value === "string"){
+    const trimmed = value.trim();
+
+    // Some versions may store a JSON string.
+    if(trimmed.startsWith("{") || trimmed.startsWith("[")){
+      try{
+        return getAddressText(JSON.parse(trimmed));
+      }catch(error){}
+    }
+
+    return trimmed;
+  }
+
+  if(typeof value === "object"){
+    return String(
+      value.address ||
+      value.fullAddress ||
+      value.location ||
+      value.name ||
+      ""
+    ).trim();
+  }
+
+  return "";
+}
+
+// Apply the saved collection address.
+function applySavedAddress(){
+  const selected = readStorage("swarmSelectedAddress", null);
+  const address = getAddressText(selected);
+
+  if(address){
+    $("pickup").value = address;
+    $("savedAddressNotice").classList.remove("hidden");
+    $("savedAddressText").textContent = "Saved collection address: " + address;
+    savedAddressApplied = true;
+  }
+}
+
+// Allow the customer to change the selected address.
+$("clearAddressBtn").addEventListener("click",()=>{
+  $("pickup").value = "";
+  $("savedAddressNotice").classList.add("hidden");
+  savedAddressApplied = false;
+  $("pickup").focus();
+});
+
+// Optional profile prefill.
+function applyProfile(){
+  const profile = readStorage("swarmProfile", null);
+
+  if(!profile || typeof profile !== "object") return;
+
+  if(profile.name && !$("sender").value){
+    $("sender").value = profile.name;
+  }
+
+  if(profile.phone && !$("senderPhone").value){
+    $("senderPhone").value = profile.phone;
+  }
+}
+
+// Select delivery method.
+document.querySelectorAll(".method").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll(".method").forEach(item=>{
+      item.classList.remove("selected");
+    });
+
+    button.classList.add("selected");
+    selectedMethod = button.dataset.method;
+    updatePrice();
+  });
+});
+
+// Illustrative pricing only.
+function updatePrice(){
+  const weight = Number($("weight").value) || 0;
+  const priority = $("priority").value;
+
+  if(!weight){
+    $("price").textContent = "R --";
+    return;
+  }
+
+  let estimate = 45 + weight * 15;
+
+  if(selectedMethod === "Zipline"){
+    estimate += 10;
+  }
+
+  if(priority === "Express"){
+    estimate *= 1.5;
+  }
+
+  $("price").textContent = "R " + estimate.toFixed(2);
+}
+
+$("weight").addEventListener("input",updatePrice);
+$("priority").addEventListener("change",updatePrice);
+
+// Collect the form data.
+function getData(){
+  return {
+    pickup:$("pickup").value.trim(),
+    destination:$("destination").value.trim(),
+    sender:$("sender").value.trim(),
+    senderPhone:$("senderPhone").value.trim(),
+    recipient:$("recipient").value.trim(),
+    recipientPhone:$("recipientPhone").value.trim(),
+    package:$("package").value,
+    weight:$("weight").value,
+    size:$("size").value,
+    notes:$("notes").value.trim(),
+    method:selectedMethod,
+    priority:$("priority").value,
+    price:$("price").textContent
+  };
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,character=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[character]);
+}
+
+// Review shipment before saving.
+$("reviewBtn").addEventListener("click",()=>{
+  if(!$("shipmentForm").reportValidity()) return;
+
+  updatePrice();
+
+  const data = getData();
+
+  if(Number(data.weight) <= 0 || Number(data.weight) > 20){
+    alert("Please enter a valid package weight between 0.1 kg and 20 kg.");
+    return;
+  }
+
+  const rows = [
+    ["Collection",data.pickup],
+    ["Destination",data.destination],
+    ["Sender",data.sender],
+    ["Sender phone",data.senderPhone],
+    ["Recipient",data.recipient],
+    ["Recipient phone",data.recipientPhone],
+    ["Package",data.package],
+    ["Weight",data.weight + " kg"],
+    ["Size",data.size],
+    ["Method",data.method],
+    ["Priority",data.priority],
+    ["Estimate",data.price]
+  ];
+
+  $("summary").innerHTML = rows.map(([label,value])=>
+    `<div class="summary-row">
+      <span>${escapeHTML(label)}</span>
+      <strong>${escapeHTML(value)}</strong>
+    </div>`
+  ).join("");
+
+  $("review").classList.remove("hidden");
+  $("success").classList.add("hidden");
+  $("p2").classList.add("active");
+
+  $("review").scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+// Return to editing.
+$("editBtn").addEventListener("click",()=>{
+  $("review").classList.add("hidden");
+  $("p2").classList.remove("active");
+
+  $("shipmentForm").scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+// Save the request.
+$("confirmBtn").addEventListener("click",()=>{
+  const data = getData();
+
+  let requests = readStorage("swarmShipments", []);
+
+  if(!Array.isArray(requests)){
+    requests = [];
+  }
+
+  // Create a unique reference.
+  const reference = "SWM-" + Date.now().toString().slice(-8);
+
+  const shipment = {
+    ...data,
+    reference,
+    status:"Request submitted",
+    description:"Your shipment request has been saved. Operational updates are not connected yet.",
+    date:new Date().toISOString()
+  };
+
+  try{
+    requests.push(shipment);
+    localStorage.setItem("swarmShipments",JSON.stringify(requests));
+  }catch(error){
+    alert("Your shipment could not be saved in this browser. Please check available storage and try again.");
+    return;
+  }
+
+  lastCreatedReference = reference;
+
+  $("reference").textContent = reference;
+
+  $("review").classList.add("hidden");
+  $("shipmentForm").classList.add("hidden");
+  $("success").classList.remove("hidden");
+
+  $("p3").classList.add("active");
+
+  $("success").scrollIntoView({behavior:"smooth",block:"start"});
+});
+
+// Open tracking for this exact shipment.
+$("trackNewShipmentBtn").addEventListener("click",()=>{
+  if(lastCreatedReference){
+    window.location.href =
+      "track.html?ref=" + encodeURIComponent(lastCreatedReference);
+  }
+});
+
+$("homeBtn").addEventListener("click",()=>{
+  window.location.href = "index.html";
+});
+
+// Initialise the page.
+applySavedAddress();
+applyProfile();
+updatePrice();
+</script>
+
+</body>
+</html>

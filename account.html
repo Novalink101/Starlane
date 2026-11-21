@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account | SWARM</title>
+
+<style>
+:root{
+  --bg:#050608;
+  --panel:rgba(18,22,28,.84);
+  --green:#00FF66;
+  --muted:#8B9BB4;
+  --border:rgba(255,255,255,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:var(--bg);
+  color:#fff;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+  padding-bottom:100px;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(0,255,102,.08),transparent 48%),
+    repeating-linear-gradient(45deg,#111 0px,#111 1px,transparent 1px,transparent 12px);
+  opacity:.4;
+}
+
+.container{max-width:520px;margin:auto;padding:0 20px}
+
+header{
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+
+.logo{font-size:20px;font-weight:900;letter-spacing:4px}
+.logo span{color:var(--green)}
+
+.back{color:var(--muted);font-size:12px;text-decoration:none}
+
+.hero{padding:30px 0 24px}
+
+.eyebrow{
+  color:var(--green);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  margin-bottom:12px;
+}
+
+h1{font-size:33px;line-height:1.15;margin-bottom:10px}
+h1 span{color:var(--green)}
+
+.hero p{color:var(--muted);font-size:13px;line-height:1.6}
+
+.profile{
+  background:linear-gradient(135deg,rgba(0,255,102,.11),rgba(18,22,28,.95) 65%);
+  border:1px solid rgba(0,255,102,.2);
+  border-radius:20px;
+  padding:20px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.avatar{
+  width:58px;height:58px;flex:none;
+  border-radius:18px;
+  display:grid;place-items:center;
+  background:rgba(0,255,102,.12);
+  color:var(--green);
+  font-size:22px;font-weight:900;
+  border:1px solid rgba(0,255,102,.25);
+}
+
+.profile-info{min-width:0;flex:1}
+.profile-info h2{font-size:17px;overflow-wrap:anywhere}
+.profile-info p{font-size:11px;color:var(--muted);margin-top:5px}
+.profile-tag{
+  font-size:9px;color:var(--green);
+  background:rgba(0,255,102,.09);
+  padding:7px 9px;border-radius:20px;
+  white-space:nowrap;
+}
+
+.section{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:15px;
+}
+
+.section-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:19px;
+}
+
+.section-heading h2{font-size:15px}
+.section-heading span{font-size:10px;color:var(--muted)}
+
+.field{margin-bottom:15px}
+.field:last-child{margin-bottom:0}
+
+label{
+  display:block;
+  color:#C6D0DC;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.7px;
+  margin-bottom:8px;
+}
+
+input,select,textarea{
+  width:100%;
+  background:#090D11;
+  border:1px solid var(--border);
+  border-radius:11px;
+  color:#fff;
+  padding:14px;
+  font:inherit;
+  font-size:12px;
+  outline:none;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:var(--green);
+}
+
+input::placeholder,textarea::placeholder{color:#566173}
+
+button{font-family:inherit;cursor:pointer}
+
+.primary{
+  width:100%;
+  background:var(--green);
+  color:#001A09;
+  border:0;
+  border-radius:11px;
+  padding:14px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.8px;
+}
+
+.secondary{
+  background:#10151A;
+  color:#D5DEE9;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:11px 13px;
+  font-size:10px;
+  font-weight:800;
+}
+
+.address-card{
+  background:#090D11;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:15px;
+  margin-bottom:10px;
+}
+
+.address-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:9px;
+}
+
+.address-top strong{font-size:12px}
+.address-card p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+
+.address-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.address-actions button{flex:1}
+
+.preference{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:15px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.preference:last-child{border:0;padding-bottom:0}
+
+.preference strong{font-size:12px;display:block}
+.preference small{color:var(--muted);font-size:10px;display:block;margin-top:5px;line-height:1.5}
+
+.toggle{
+  appearance:none;
+  width:42px;height:24px;
+  flex:none;
+  background:#343B43;
+  border-radius:30px;
+  position:relative;
+  cursor:pointer;
+  padding:0;
+}
+
+.toggle:before{
+  content:"";
+  position:absolute;
+  width:18px;height:18px;
+  background:white;
+  border-radius:50%;
+  top:3px;left:3px;
+  transition:.2s;
+}
+
+.toggle:checked{background:var(--green)}
+.toggle:checked:before{left:21px;background:#001A09}
+
+.message{
+  display:none;
+  color:var(--green);
+  font-size:11px;
+  margin-top:12px;
+}
+
+.danger{
+  border-color:rgba(255,90,90,.22);
+}
+
+.danger button{
+  width:100%;
+  background:rgba(255,75,75,.09);
+  color:#FF8888;
+  border:1px solid rgba(255,75,75,.2);
+  padding:13px;
+  border-radius:10px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.notice{
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+  padding:20px 5px;
+}
+
+.empty-address{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+  padding:8px 0 15px;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  background:rgba(10,13,17,.96);
+  backdrop-filter:blur(15px);
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-around;
+  padding:14px 10px calc(14px + env(safe-area-inset-bottom));
+  z-index:5;
+}
+
+.bottom-nav a{
+  color:var(--muted);
+  font-size:11px;
+  text-align:center;
+  text-decoration:none;
+}
+
+.bottom-nav a.active{color:var(--green)}
+
+@media(max-width:360px){
+  .container{padding:0 15px}
+  .section{padding:16px}
+  h1{font-size:29px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <div class="logo">SW<span>A</span>RM</div>
+  <a href="index.html" class="back">← Home</a>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">SWARM LOGISTICS / CUSTOMER CENTRE</div>
+  <h1>Your account.<br><span>Your control.</span></h1>
+  <p>Manage your personal information, delivery addresses and account preferences.</p>
+</section>
+
+<div class="profile">
+  <div class="avatar" id="avatar">S</div>
+  <div class="profile-info">
+    <h2 id="profileName">SWARM Customer</h2>
+    <p id="profileEmail">No email added</p>
+  </div>
+  <div class="profile-tag">SHIPPER</div>
+</div>
+
+<!-- PERSONAL INFORMATION -->
+<section class="section">
+  <div class="section-heading">
+    <h2>Personal information</h2>
+    <span>PROFILE</span>
+  </div>
+
+  <form id="profileForm">
+    <div class="field">
+      <label for="fullName">FULL NAME</label>
+      <input id="fullName" placeholder="Your full name" maxlength="80">
+    </div>
+
+    <div class="field">
+      <label for="email">EMAIL ADDRESS</label>
+      <input id="email" type="email" placeholder="you@example.com">
+    </div>
+
+    <div class="field">
+      <label for="phone">PHONE NUMBER</label>
+      <input id="phone" type="tel" placeholder="+27 ...">
+    </div>
+
+    <button class="primary" type="submit">SAVE PROFILE</button>
+    <p class="message" id="profileMessage">Profile saved on this device.</p>
+  </form>
+</section>
+
+<!-- SAVED ADDRESSES -->
+<section class="section">
+  <div class="section-heading">
+    <h2>Saved addresses</h2>
+    <span>LOCATIONS</span>
+  </div>
+
+  <div id="addressList"></div>
+
+  <div style="border-top:1px solid var(--border);padding-top:17px;margin-top:12px">
+    <div class="field">
+      <label for="addressName">ADDRESS LABEL</label>
+      <input id="addressName" placeholder="e.g. Home, Office">
+    </div>
+
+    <div class="field">
+      <label for="addressValue">FULL ADDRESS</label>
+      <textarea id="addressValue" rows="3" placeholder="Enter your full address"></textarea>
+    </div>
+
+    <button class="primary" type="button" id="addAddress">
+      + ADD SAVED ADDRESS
+    </button>
+    <p class="message" id="addressMessage">Address saved.</p>
+  </div>
+</section>
+
+<!-- PREFERENCES -->
+<section class="section">
+  <div class="section-heading">
+    <h2>Account preferences</h2>
+    <span>SETTINGS</span>
+  </div>
+
+  <div class="preference">
+    <div>
+      <strong>Email updates</strong>
+      <small>Receive shipment updates by email when supported.</small>
+    </div>
+    <input class="toggle" type="checkbox" id="emailUpdates" checked>
+  </div>
+
+  <div class="preference">
+    <div>
+      <strong>SMS updates</strong>
+      <small>Receive delivery notifications by SMS when supported.</small>
+    </div>
+    <input class="toggle" type="checkbox" id="smsUpdates">
+  </div>
+
+  <div class="preference">
+    <div>
+      <strong>Promotional messages</strong>
+      <small>Receive SWARM news and service announcements.</small>
+    </div>
+    <input class="toggle" type="checkbox" id="promotions">
+  </div>
+
+  <button class="primary" id="savePreferences" style="margin-top:19px">
+    SAVE PREFERENCES
+  </button>
+  <p class="message" id="preferencesMessage">Preferences saved on this device.</p>
+</section>
+
+<!-- ACCOUNT INFORMATION -->
+<section class="section">
+  <div class="section-heading">
+    <h2>Account information</h2>
+    <span>ACCOUNT</span>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-size:11px">
+    <span style="color:var(--muted)">Account type</span>
+    <strong>Customer / Shipper</strong>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-size:11px">
+    <span style="color:var(--muted)">Platform</span>
+    <strong>SWARM</strong>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;padding:12px 0;font-size:11px">
+    <span style="color:var(--muted)">Account created</span>
+    <strong id="createdDate">Not registered</strong>
+  </div>
+</section>
+
+<!-- DANGER ZONE -->
+<section class="section danger">
+  <div class="section-heading">
+    <h2>Account data</h2>
+    <span>LOCAL DEMO</span>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:15px">
+    This prototype stores account details on this browser only. Clearing local account data will remove your saved profile, addresses and preferences from this device.
+  </p>
+
+  <button id="clearAccount">CLEAR ACCOUNT PROFILE DATA</button>
+</section>
+
+<p class="notice">
+  SWARM AERIAL LOGISTICS<br>
+  Your information. Your control.
+</p>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="index.html">⌂<br>Home</a>
+  <a href="send.html">＋<br>Send</a>
+  <a href="track.html">◎<br>Track</a>
+  <a href="history.html">◷<br>History</a>
+</nav>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const PROFILE_KEY = "swarmProfile";
+const ADDRESS_KEY = "swarmAddresses";
+const PREF_KEY = "swarmPreferences";
+
+function read(key,fallback){
+  try{
+    const value=JSON.parse(localStorage.getItem(key));
+    return value ?? fallback;
+  }catch(e){
+    return fallback;
+  }
+}
+
+function saveMessage(id,text){
+  $(id).textContent=text;
+  $(id).style.display="block";
+  setTimeout(()=>$(id).style.display="none",2500);
+}
+
+function loadProfile(){
+  const p=read(PROFILE_KEY,{});
+  $("fullName").value=p.name||"";
+  $("email").value=p.email||"";
+  $("phone").value=p.phone||"";
+
+  $("profileName").textContent=p.name||"SWARM Customer";
+  $("profileEmail").textContent=p.email||"No email added";
+  $("avatar").textContent=p.name ? p.name.trim().charAt(0).toUpperCase() : "S";
+  $("createdDate").textContent=p.created
+    ? new Date(p.created).toLocaleDateString("en-ZA")
+    : "Not registered";
+}
+
+$("profileForm").addEventListener("submit",e=>{
+  e.preventDefault();
+
+  const previous=read(PROFILE_KEY,{});
+  const profile={
+    name:$("fullName").value.trim(),
+    email:$("email").value.trim(),
+    phone:$("phone").value.trim(),
+    created:previous.created||new Date().toISOString()
+  };
+
+  if(!profile.name){
+    alert("Please enter your name.");
+    return;
+  }
+
+  localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));
+  loadProfile();
+  saveMessage("profileMessage","Profile saved on this device.");
+});
+
+function loadAddresses(){
+  const addresses=read(ADDRESS_KEY,[]);
+  const list=$("addressList");
+
+  if(!addresses.length){
+    list.innerHTML='<div class="empty-address">No saved addresses yet. Add your home or office address below.</div>';
+    return;
+  }
+
+  list.innerHTML=addresses.map((address,index)=>`
+    <div class="address-card">
+      <div class="address-top">
+        <strong>${escapeHTML(address.name)}</strong>
+        <span style="color:var(--green);font-size:9px">SAVED</span>
+      </div>
+      <p>${escapeHTML(address.address)}</p>
+      <div class="address-actions">
+        <button class="secondary" type="button" onclick="useAddress(${index})">USE FOR SENDING</button>
+        <button class="secondary" type="button" onclick="deleteAddress(${index})">DELETE</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+$("addAddress").addEventListener("click",()=>{
+  const name=$("addressName").value.trim();
+  const address=$("addressValue").value.trim();
+
+  if(!name||!address){
+    alert("Please enter an address label and full address.");
+    return;
+  }
+
+  const addresses=read(ADDRESS_KEY,[]);
+  addresses.push({name,address});
+  localStorage.setItem(ADDRESS_KEY,JSON.stringify(addresses));
+
+  $("addressName").value="";
+  $("addressValue").value="";
+
+  loadAddresses();
+  saveMessage("addressMessage","Address saved on this device.");
+});
+
+function deleteAddress(index){
+  if(!confirm("Delete this saved address?"))return;
+
+  const addresses=read(ADDRESS_KEY,[]);
+  addresses.splice(index,1);
+  localStorage.setItem(ADDRESS_KEY,JSON.stringify(addresses));
+  loadAddresses();
+}
+
+function useAddress(index){
+  const addresses=read(ADDRESS_KEY,[]);
+  const address=addresses[index];
+  if(!address)return;
+
+  // Pass the selected address to the send page.
+  localStorage.setItem("swarmSelectedAddress",address.address);
+  location.href="send.html";
+}
+
+function loadPreferences(){
+  const p=read(PREF_KEY,{
+    email:true,
+    sms:false,
+    promotions:false
+  });
+
+  $("emailUpdates").checked=!!p.email;
+  $("smsUpdates").checked=!!p.sms;
+  $("promotions").checked=!!p.promotions;
+}
+
+$("savePreferences").addEventListener("click",()=>{
+  const preferences={
+    email:$("emailUpdates").checked,
+    sms:$("smsUpdates").checked,
+    promotions:$("promotions").checked
+  };
+
+  localStorage.setItem(PREF_KEY,JSON.stringify(preferences));
+  saveMessage("preferencesMessage","Preferences saved on this device.");
+});
+
+$("clearAccount").addEventListener("click",()=>{
+  const confirmed=confirm(
+    "Clear your SWARM profile, saved addresses and preferences from this browser? Shipment history will not be deleted."
+  );
+
+  if(!confirmed)return;
+
+  localStorage.removeItem(PROFILE_KEY);
+  localStorage.removeItem(ADDRESS_KEY);
+  localStorage.removeItem(PREF_KEY);
+  localStorage.removeItem("swarmSelectedAddress");
+
+  loadProfile();
+  loadAddresses();
+  loadPreferences();
+
+  alert("Local account profile data cleared.");
+});
+
+loadProfile();
+loadAddresses();
+loadPreferences();
+</script>
+
+</body>
+</html>

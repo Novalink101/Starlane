@@ -1,0 +1,559 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050608">
+<title>Live Tracking | SWARM</title>
+<style>
+:root{
+  --bg:#050608;
+  --panel:rgba(18,22,28,.82);
+  --green:#00FF66;
+  --muted:#8B9BB4;
+  --border:rgba(255,255,255,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:#fff;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;padding-bottom:95px;
+}
+body:before{
+  content:"";position:fixed;inset:0;z-index:-1;
+  background:
+  radial-gradient(circle at 50% 0%,rgba(0,255,102,.08),transparent 48%),
+  repeating-linear-gradient(45deg,#111 0px,#111 1px,transparent 1px,transparent 12px);
+  opacity:.4;
+}
+.container{max-width:520px;margin:auto;padding:0 20px}
+header{
+  height:76px;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--border);
+}
+.logo{font-size:20px;font-weight:900;letter-spacing:4px}
+.logo span{color:var(--green)}
+.back{color:var(--muted);font-size:12px;text-decoration:none}
+.hero{padding:30px 0 23px}
+.eyebrow{
+  color:var(--green);font-size:10px;font-weight:800;
+  letter-spacing:2px;margin-bottom:12px
+}
+h1{font-size:34px;line-height:1.15;margin-bottom:12px}
+h1 span{color:var(--green)}
+.hero p{color:var(--muted);font-size:13px;line-height:1.6}
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:20px;padding:20px;margin-bottom:16px;
+  box-shadow:inset 0 1px rgba(255,255,255,.035);
+}
+.panel-title{
+  font-size:14px;font-weight:800;margin-bottom:16px;
+  display:flex;justify-content:space-between;align-items:center
+}
+.panel-title small{font-size:10px;color:var(--muted);font-weight:500}
+label{
+  font-size:10px;color:var(--muted);font-weight:700;
+  letter-spacing:1px;display:block;margin-bottom:9px
+}
+.lookup{display:flex;gap:9px}
+input{
+  min-width:0;flex:1;background:#090C10;
+  border:1px solid var(--border);border-radius:11px;
+  color:#fff;padding:14px;font-size:13px;outline:none
+}
+input:focus{border-color:var(--green)}
+button{cursor:pointer;font-family:inherit}
+.search-btn{
+  background:var(--green);border:0;border-radius:11px;
+  padding:0 16px;color:#001A09;font-weight:900;font-size:12px
+}
+.error{color:#ff8585;font-size:11px;margin-top:10px;display:none}
+.status-top{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:16px;gap:10px
+}
+.status{
+  color:var(--green);font-size:10px;font-weight:900;
+  letter-spacing:1px;background:rgba(0,255,102,.09);
+  padding:8px 10px;border-radius:30px
+}
+.reference{font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+h2{font-size:19px;margin-bottom:7px}
+.subtext{font-size:12px;color:var(--muted);line-height:1.5}
+.route{
+  background:#080D10;border:1px solid var(--border);
+  border-radius:15px;padding:20px;margin-top:19px;
+  position:relative;overflow:hidden
+}
+.route:before{
+  content:"";position:absolute;width:170px;height:170px;
+  border:1px solid rgba(0,255,102,.09);border-radius:50%;
+  right:-65px;top:-75px
+}
+.route-label{
+  color:var(--muted);font-size:9px;
+  letter-spacing:1.5px;font-weight:800;margin-bottom:9px
+}
+.location{font-size:14px;font-weight:700;overflow-wrap:anywhere}
+.route-line{
+  height:50px;display:flex;align-items:center;
+  margin-left:6px;position:relative
+}
+.route-line:before{
+  content:"";height:100%;width:2px;
+  background:linear-gradient(var(--green),#35433C)
+}
+.route-dot{
+  width:10px;height:10px;background:var(--green);
+  border-radius:50%;position:absolute;left:-4px;
+  box-shadow:0 0 12px rgba(0,255,102,.6)
+}
+.route-dot.end{bottom:0;background:#7B8793;box-shadow:none}
+.route-bottom{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:12px
+}
+.route-bottom .route-label{margin:0 0 8px}
+.vehicle{
+  border:1px solid rgba(0,255,102,.25);
+  color:var(--green);padding:10px 12px;
+  border-radius:11px;font-size:11px;font-weight:800;
+  text-align:center
+}
+.stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px
+}
+.stat{
+  background:#090D11;border:1px solid var(--border);
+  border-radius:13px;padding:14px;min-width:0
+}
+.stat span{font-size:10px;color:var(--muted);display:block;margin-bottom:8px}
+.stat strong{font-size:16px;overflow-wrap:anywhere}
+.stat strong.green{color:var(--green)}
+.timeline{margin-top:5px}
+.step{display:flex;gap:13px;position:relative;padding-bottom:24px}
+.step:last-child{padding-bottom:0}
+.step-icon{
+  width:27px;height:27px;flex:none;border-radius:50%;
+  border:1px solid #38414A;color:#75808D;
+  display:grid;place-items:center;font-size:11px;
+  background:#0B0F13;z-index:1
+}
+.step.done .step-icon{
+  border-color:var(--green);color:var(--green);
+  background:rgba(0,255,102,.08)
+}
+.step.current .step-icon{
+  background:var(--green);color:#001A09;
+  box-shadow:0 0 15px rgba(0,255,102,.25)
+}
+.step:not(:last-child):before{
+  content:"";position:absolute;left:13px;top:27px;
+  height:calc(100% - 27px);width:1px;background:#303942
+}
+.step.done:not(:last-child):before{background:rgba(0,255,102,.55)}
+.step strong{font-size:12px;display:block;margin:3px 0 5px}
+.step small{font-size:10px;color:var(--muted);line-height:1.5}
+.step-time{margin-left:auto;font-size:10px;color:var(--muted);white-space:nowrap;padding-top:4px}
+.detail{
+  display:flex;justify-content:space-between;gap:12px;
+  border-bottom:1px solid var(--border);padding:12px 0;font-size:11px
+}
+.detail:last-child{border:0;padding-bottom:0}
+.detail span{color:var(--muted)}
+.detail strong{text-align:right;overflow-wrap:anywhere}
+.help{
+  text-align:center;color:var(--muted);
+  font-size:11px;line-height:1.6;padding:5px 8px 20px
+}
+.help a{color:var(--green);text-decoration:none}
+.hidden{display:none!important}
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(10,13,17,.96);backdrop-filter:blur(15px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;
+  padding:14px 10px calc(14px + env(safe-area-inset-bottom));
+  z-index:5
+}
+.bottom-nav a{
+  color:var(--muted);font-size:11px;
+  text-align:center;text-decoration:none
+}
+.bottom-nav a.active{color:var(--green)}
+@media(max-width:360px){
+  h1{font-size:29px}
+  .panel{padding:16px}
+  .search-btn{padding:0 11px}
+  .step{gap:9px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <div class="logo">SW<span>A</span>RM</div>
+  <a class="back" href="index.html">← Home</a>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">SWARM LOGISTICS / TRACKING</div>
+  <h1>Know where<br>it <span>is.</span></h1>
+  <p>Enter your shipment reference to view its latest recorded status and delivery progress.</p>
+</section>
+
+<section class="panel">
+  <div class="panel-title">
+    Track a shipment
+    <small>SHIPMENT LOOKUP</small>
+  </div>
+
+  <label for="trackingInput">TRACKING REFERENCE</label>
+
+  <div class="lookup">
+    <input
+      id="trackingInput"
+      type="text"
+      placeholder="e.g. SWM-12345678"
+      autocomplete="off"
+      autocapitalize="characters"
+    >
+    <button class="search-btn" id="searchBtn" type="button">TRACK →</button>
+  </div>
+
+  <div class="error" id="error" role="alert">
+    We couldn't find that reference. Check it and try again.
+  </div>
+</section>
+
+<div id="trackingResult" class="hidden">
+
+  <section class="panel">
+
+    <div class="status-top">
+      <span class="status" id="statusBadge">REQUEST SUBMITTED</span>
+      <span class="reference" id="referenceLabel">SWM-00000000</span>
+    </div>
+
+    <h2 id="statusTitle">Shipment request received</h2>
+
+    <p class="subtext" id="statusDescription">
+      Your shipment request has been saved.
+    </p>
+
+    <div class="route">
+
+      <div class="route-label">COLLECTION POINT</div>
+      <div class="location" id="pickup">Collection location</div>
+
+      <div class="route-line">
+        <span class="route-dot"></span>
+        <span class="route-dot end"></span>
+      </div>
+
+      <div class="route-bottom">
+        <div>
+          <div class="route-label">DESTINATION</div>
+          <div class="location" id="destination">Destination location</div>
+        </div>
+
+        <div class="vehicle" id="method">PENDING</div>
+      </div>
+
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <span>DELIVERY ESTIMATE</span>
+        <strong id="eta">Awaiting confirmation</strong>
+      </div>
+
+      <div class="stat">
+        <span>SHIPMENT STATUS</span>
+        <strong class="green" id="shortStatus">Submitted</strong>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">
+      Delivery timeline
+      <small>STATUS HISTORY</small>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">Shipment details</div>
+
+    <div class="detail">
+      <span>Recipient</span>
+      <strong id="recipient">—</strong>
+    </div>
+
+    <div class="detail">
+      <span>Package</span>
+      <strong id="package">—</strong>
+    </div>
+
+    <div class="detail">
+      <span>Weight</span>
+      <strong id="weight">—</strong>
+    </div>
+
+    <div class="detail">
+      <span>Priority</span>
+      <strong id="priority">—</strong>
+    </div>
+
+    <div class="detail">
+      <span>Reference</span>
+      <strong id="detailReference">—</strong>
+    </div>
+  </section>
+
+</div>
+
+<p class="help">
+  Need assistance with a shipment?<br>
+  <a href="support.html">Contact SWARM support →</a>
+  <br><br>
+  Tracking information is only as current as the latest system update.
+  This website prototype does not currently connect to live vehicles or GPS.
+</p>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="index.html">⌂<br>Home</a>
+  <a href="send.html">＋<br>Send</a>
+  <a href="track.html" class="active">◎<br>Track</a>
+  <a href="history.html">◷<br>History</a>
+</nav>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function getShipments(){
+  try{
+    const data = JSON.parse(localStorage.getItem("swarmShipments") || "[]");
+    return Array.isArray(data) ? data : [];
+  }catch(error){
+    return [];
+  }
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[character]);
+}
+
+function findShipment(reference){
+  const saved = getShipments();
+
+  return saved.find(shipment =>
+    String(shipment.reference || "").toLowerCase() === reference.toLowerCase()
+  ) || null;
+}
+
+function formatWeight(value){
+  if(value === undefined || value === null || value === ""){
+    return "Not provided";
+  }
+
+  const weight = String(value).trim();
+
+  if(/\s?kg$/i.test(weight)){
+    return weight;
+  }
+
+  return weight + " kg";
+}
+
+function getDefaultTimeline(status){
+  const normalized = String(status || "").toLowerCase();
+
+  const isDelivered = normalized === "delivered";
+  const isCancelled = normalized === "cancelled";
+
+  return [
+    {
+      title:"Shipment request created",
+      description:"Your request has been saved in this browser.",
+      done:true,
+      time:"Recorded"
+    },
+    {
+      title:"Collection confirmed",
+      description:"Collection confirmation will appear here when updated.",
+      done:false,
+      time:"Pending"
+    },
+    {
+      title:"In transit",
+      description:"Transport updates will appear here when connected.",
+      done:false,
+      time:"Pending"
+    },
+    {
+      title:"Delivered",
+      description:"Delivery confirmation will appear here when updated.",
+      done:isDelivered,
+      current:isDelivered,
+      time:isDelivered ? "Recorded" : "Pending"
+    }
+  ].map((item, index) => {
+    if(isCancelled && index === 1){
+      return {
+        title:"Shipment cancelled",
+        description:"This shipment has been marked as cancelled.",
+        done:true,
+        current:true,
+        time:"Recorded"
+      };
+    }
+    return item;
+  });
+}
+
+function renderTimeline(items){
+  $("timeline").innerHTML = items.map(item => `
+    <div class="step ${item.done ? "done" : ""} ${item.current ? "current" : ""}">
+      <div class="step-icon">
+        ${item.done ? "✓" : item.current ? "●" : "○"}
+      </div>
+      <div>
+        <strong>${escapeHTML(item.title || "Update")}</strong>
+        <small>${escapeHTML(item.description || "")}</small>
+      </div>
+      <span class="step-time">${escapeHTML(item.time || "")}</span>
+    </div>
+  `).join("");
+}
+
+function showError(message){
+  $("trackingResult").classList.add("hidden");
+  $("error").textContent = message;
+  $("error").style.display = "block";
+}
+
+function showShipment(shipment){
+  $("error").style.display = "none";
+  $("trackingResult").classList.remove("hidden");
+
+  const status = shipment.status || "Request submitted";
+  const normalizedStatus = String(status).toLowerCase();
+
+  $("statusBadge").textContent = status.toUpperCase();
+  $("referenceLabel").textContent = shipment.reference || "—";
+
+  if(normalizedStatus === "request submitted"){
+    $("statusTitle").textContent = "Shipment request received";
+  }else if(normalizedStatus === "delivered"){
+    $("statusTitle").textContent = "Shipment marked as delivered";
+  }else if(normalizedStatus === "cancelled"){
+    $("statusTitle").textContent = "Shipment cancelled";
+  }else{
+    $("statusTitle").textContent = "Shipment status: " + status;
+  }
+
+  $("statusDescription").textContent =
+    shipment.description ||
+    "Your shipment request has been saved. Further operational updates will appear here when available.";
+
+  $("pickup").textContent = shipment.pickup || "Not provided";
+  $("destination").textContent = shipment.destination || "Not provided";
+  $("method").textContent = (shipment.method || "Pending").toUpperCase();
+
+  $("eta").textContent = shipment.eta || "Awaiting confirmation";
+  $("shortStatus").textContent = status;
+
+  $("recipient").textContent = shipment.recipient || "Not provided";
+  $("package").textContent = shipment.package || "Not provided";
+  $("weight").textContent = formatWeight(shipment.weight);
+  $("priority").textContent = shipment.priority || "Standard";
+  $("detailReference").textContent = shipment.reference || "—";
+
+  const timeline = Array.isArray(shipment.timeline) && shipment.timeline.length
+    ? shipment.timeline
+    : getDefaultTimeline(status);
+
+  renderTimeline(timeline);
+}
+
+function track(){
+  const reference = $("trackingInput").value.trim();
+
+  if(!reference){
+    showError("Please enter a tracking reference.");
+    return;
+  }
+
+  const shipment = findShipment(reference);
+
+  if(!shipment){
+    showError("We couldn't find that reference. Check it and try again.");
+    return;
+  }
+
+  showShipment(shipment);
+}
+
+// Search button
+$("searchBtn").addEventListener("click", track);
+
+// Enter key
+$("trackingInput").addEventListener("keydown", event => {
+  if(event.key === "Enter"){
+    event.preventDefault();
+    track();
+  }
+});
+
+// Direct tracking links from History:
+// track.html?ref=SWM-12345678
+const urlParams = new URLSearchParams(window.location.search);
+const requestedReference = urlParams.get("ref");
+
+// A reference in the URL takes priority over the latest shipment.
+if(requestedReference){
+  $("trackingInput").value = requestedReference;
+
+  const requestedShipment = findShipment(requestedReference);
+
+  if(requestedShipment){
+    showShipment(requestedShipment);
+  }else{
+    showError("That shipment reference was not found in this browser. Check the reference or open your delivery history.");
+  }
+
+}else{
+  // No URL reference: load the most recent saved shipment.
+  const saved = getShipments();
+
+  if(saved.length){
+    const latestShipment = saved[saved.length - 1];
+
+    $("trackingInput").value = latestShipment.reference || "";
+
+    if(latestShipment.reference){
+      showShipment(latestShipment);
+    }
+  }
+}
+</script>
+
+</body>
+</html>

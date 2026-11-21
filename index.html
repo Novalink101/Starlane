@@ -1,0 +1,1647 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050608">
+<meta name="description" content="SWARM — Aerial and cable logistics. Request deliveries, track shipments and manage your packages.">
+<title>SWARM — Aerial Logistics</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:#050608;
+  --carbon:#121518;
+  --surface:#101519;
+  --surface2:#171e21;
+  --green:#00E65B;
+  --green-dim:rgba(0,230,91,.12);
+  --white:#fff;
+  --muted:#8b9bb4;
+  --border:rgba(255,255,255,.09);
+  --radius:20px;
+  --font:'Plus Jakarta Sans',sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:95px;
+}
+
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:var(--font);
+  overflow-x:hidden;
+  padding-bottom:80px;
+}
+
+button,a{font:inherit;-webkit-tap-highlight-color:transparent}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+::selection{background:var(--green);color:#000}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  opacity:.18;
+  background-color:#080a0c;
+  background-image:
+    linear-gradient(27deg,#222 5px,transparent 5px),
+    linear-gradient(207deg,#222 5px,transparent 5px),
+    linear-gradient(27deg,#191d20 5px,transparent 5px),
+    linear-gradient(207deg,#191d20 5px,transparent 5px);
+  background-size:20px 20px;
+  background-position:0 0,10px 5px,5px 10px,15px 15px;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(0,230,91,.08),transparent 45%),
+    linear-gradient(180deg,rgba(5,6,8,.25),rgba(5,6,8,.85));
+}
+
+.container{
+  width:min(1120px,calc(100% - 40px));
+  margin:auto;
+}
+
+/* HEADER */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(5,6,8,.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+
+.header-inner{
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:21px;
+  font-weight:800;
+  letter-spacing:.12em;
+  flex-shrink:0;
+}
+
+.logo svg{width:31px;height:31px}
+
+.desktop-nav{
+  display:flex;
+  align-items:center;
+  gap:24px;
+}
+
+.desktop-nav a{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.desktop-nav a:hover,
+.desktop-nav a.active{color:var(--green)}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.account-btn{
+  width:39px;
+  height:39px;
+  border-radius:50%;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:white;
+  display:grid;
+  place-items:center;
+}
+
+.menu-btn{
+  display:none;
+  background:transparent;
+  color:white;
+  border:0;
+  font-size:25px;
+}
+
+/* BUTTONS */
+
+.btn{
+  border:1px solid transparent;
+  border-radius:11px;
+  padding:13px 19px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.04em;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  transition:.25s;
+  cursor:pointer;
+}
+
+.btn-primary{
+  color:#001d0b;
+  background:var(--green);
+  box-shadow:0 0 24px rgba(0,230,91,.12);
+}
+
+.btn-primary:hover{
+  background:#35ff83;
+  transform:translateY(-2px);
+  box-shadow:0 0 30px rgba(0,230,91,.25);
+}
+
+.btn-outline{
+  color:white;
+  background:rgba(255,255,255,.025);
+  border-color:var(--border);
+}
+
+.btn-outline:hover{
+  border-color:var(--green);
+  color:var(--green);
+}
+
+.btn-full{width:100%}
+
+/* MOBILE MENU */
+
+.mobile-menu{
+  display:none;
+  position:absolute;
+  top:76px;
+  left:0;
+  right:0;
+  padding:18px 22px 25px;
+  background:#0b1011;
+  border-bottom:1px solid var(--border);
+}
+
+.mobile-menu.open{
+  display:grid;
+  gap:19px;
+}
+
+.mobile-menu a{
+  color:#c7d0ca;
+  font-size:13px;
+  font-weight:600;
+}
+
+.mobile-menu a:hover{color:var(--green)}
+
+/* HERO */
+
+.hero{
+  padding:105px 0 85px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:430px;
+  height:430px;
+  right:-160px;
+  top:0;
+  border:1px solid rgba(0,230,91,.09);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 45px rgba(0,230,91,.018),
+    0 0 0 95px rgba(0,230,91,.012),
+    0 0 100px rgba(0,230,91,.05);
+  pointer-events:none;
+}
+
+.hero-content{
+  position:relative;
+  z-index:1;
+  max-width:760px;
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:9px 14px;
+  border-radius:50px;
+  border:1px solid rgba(0,230,91,.25);
+  background:rgba(0,230,91,.05);
+  color:var(--green);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:28px;
+}
+
+.live-dot{
+  width:7px;
+  height:7px;
+  background:var(--green);
+  border-radius:50%;
+  box-shadow:0 0 12px var(--green);
+}
+
+.hero h1{
+  font-size:clamp(45px,8vw,82px);
+  line-height:1.04;
+  letter-spacing:-.065em;
+  font-weight:800;
+  margin-bottom:25px;
+}
+
+.hero h1 span{
+  color:var(--green);
+  text-shadow:0 0 35px rgba(0,230,91,.2);
+}
+
+.hero-description{
+  max-width:540px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.9;
+  margin-bottom:32px;
+}
+
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.hero-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:38px;
+  margin-top:65px;
+  padding-top:25px;
+  border-top:1px solid var(--border);
+}
+
+.stat strong{
+  display:block;
+  font-size:20px;
+  font-weight:800;
+}
+
+.stat span{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:5px;
+}
+
+/* GENERAL SECTIONS */
+
+section.content-section{padding:75px 0}
+
+.section-heading{margin-bottom:35px}
+
+.section-label{
+  color:var(--green);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.section-heading h2{
+  font-size:clamp(27px,5vw,43px);
+  letter-spacing:-.045em;
+  line-height:1.2;
+  margin-bottom:12px;
+}
+
+.section-heading p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.8;
+  max-width:550px;
+}
+
+/* CUSTOMER PORTAL */
+
+.portal-section{padding:20px 0 55px!important}
+
+.portal-box{
+  background:linear-gradient(145deg,#151d1b,#0c1112);
+  border:1px solid rgba(0,230,91,.17);
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 25px 60px rgba(0,0,0,.25);
+}
+
+.portal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.portal-header h2{
+  font-size:23px;
+  letter-spacing:-.04em;
+}
+
+.portal-header p{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:7px;
+  line-height:1.7;
+}
+
+.portal-badge{
+  color:var(--green);
+  font-size:9px;
+  font-weight:800;
+  border:1px solid rgba(0,230,91,.2);
+  padding:8px 12px;
+  border-radius:30px;
+  white-space:nowrap;
+}
+
+.portal-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
+}
+
+.portal-card{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  padding:20px;
+  min-height:155px;
+  border-radius:15px;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--border);
+  transition:.25s;
+}
+
+.portal-card:hover{
+  border-color:rgba(0,230,91,.4);
+  background:rgba(0,230,91,.045);
+  transform:translateY(-3px);
+}
+
+.portal-icon{
+  width:39px;
+  height:39px;
+  display:grid;
+  place-items:center;
+  color:var(--green);
+  background:rgba(0,230,91,.07);
+  border:1px solid rgba(0,230,91,.18);
+  border-radius:12px;
+  margin-bottom:15px;
+}
+
+.portal-icon svg{width:20px;height:20px}
+
+.portal-card strong{
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.portal-card span{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+}
+
+.portal-arrow{
+  color:var(--green);
+  margin-top:auto;
+  padding-top:13px;
+  font-size:11px;
+  font-weight:800;
+}
+
+/* SERVICES */
+
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+
+.service-card{
+  position:relative;
+  overflow:hidden;
+  padding:28px;
+  min-height:255px;
+  background:rgba(16,21,25,.85);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  transition:.3s;
+}
+
+.service-card:hover{
+  border-color:rgba(0,230,91,.4);
+  transform:translateY(-4px);
+}
+
+.service-icon{
+  width:55px;
+  height:55px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(0,230,91,.2);
+  background:rgba(0,230,91,.06);
+  color:var(--green);
+  border-radius:16px;
+  margin-bottom:24px;
+}
+
+.service-icon svg{width:26px;height:26px}
+
+.service-card h3{
+  font-size:19px;
+  margin-bottom:10px;
+}
+
+.service-card p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8;
+  max-width:390px;
+}
+
+.service-tag{
+  display:inline-block;
+  color:var(--green);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.1em;
+  margin-top:22px;
+}
+
+/* HOW IT WORKS */
+
+.steps-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.step-card{
+  padding:23px 18px;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:rgba(255,255,255,.018);
+  min-height:180px;
+}
+
+.step-number{
+  color:var(--green);
+  font-size:26px;
+  font-weight:800;
+  opacity:.8;
+  margin-bottom:22px;
+}
+
+.step-card h3{
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.step-card p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.8;
+}
+
+/* TRACKING CTA */
+
+.tracking-box{
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:30px;
+  background:linear-gradient(145deg,#121a18,#0c1013);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:25px;
+}
+
+.tracking-copy{
+  display:flex;
+  align-items:flex-start;
+  gap:15px;
+}
+
+.tracking-copy svg{
+  color:var(--green);
+  flex-shrink:0;
+}
+
+.tracking-copy h3{
+  font-size:17px;
+  margin-bottom:8px;
+}
+
+.tracking-copy p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.8;
+  max-width:450px;
+}
+
+/* BENEFITS */
+
+.benefit-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.benefit-card{
+  padding:23px;
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--border);
+}
+
+.benefit-card svg{
+  width:24px;
+  height:24px;
+  color:var(--green);
+  margin-bottom:17px;
+}
+
+.benefit-card h3{
+  font-size:13px;
+  margin-bottom:9px;
+}
+
+.benefit-card p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.8;
+}
+
+/* FAQ */
+
+.faq-list{
+  display:grid;
+  gap:10px;
+  max-width:800px;
+}
+
+.faq-item{
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:rgba(255,255,255,.02);
+  overflow:hidden;
+}
+
+.faq-question{
+  width:100%;
+  background:none;
+  color:white;
+  border:0;
+  padding:19px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  text-align:left;
+  font-size:12px;
+  font-weight:700;
+}
+
+.faq-question span:last-child{
+  color:var(--green);
+  font-size:19px;
+  transition:.2s;
+}
+
+.faq-answer{
+  display:none;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.8;
+  padding:0 19px 19px;
+}
+
+.faq-item.open .faq-answer{display:block}
+.faq-item.open .faq-question span:last-child{transform:rotate(45deg)}
+
+/* FINAL CTA */
+
+.final-cta{
+  padding:55px 30px;
+  text-align:center;
+  border-radius:24px;
+  border:1px solid rgba(0,230,91,.2);
+  background:
+    radial-gradient(ellipse at center,rgba(0,230,91,.09),transparent 65%),
+    #0e1413;
+}
+
+.final-cta h2{
+  font-size:clamp(27px,5vw,43px);
+  letter-spacing:-.05em;
+  margin-bottom:14px;
+}
+
+.final-cta h2 span{color:var(--green)}
+
+.final-cta p{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:25px;
+  line-height:1.8;
+}
+
+/* FOOTER */
+
+footer{
+  padding:55px 0 25px;
+  border-top:1px solid var(--border);
+  margin-top:75px;
+  background:rgba(0,0,0,.18);
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:40px;
+}
+
+.footer-brand p{
+  max-width:270px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.9;
+  margin-top:15px;
+}
+
+.footer-column h4{
+  font-size:11px;
+  margin-bottom:17px;
+}
+
+.footer-column a{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:12px;
+}
+
+.footer-column a:hover{color:var(--green)}
+
+.footer-bottom{
+  margin-top:40px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  color:#64746b;
+  font-size:10px;
+}
+
+/* MOBILE BOTTOM NAV */
+
+.bottom-nav{
+  display:none;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:200;
+  height:calc(66px + env(safe-area-inset-bottom));
+  padding:8px 12px env(safe-area-inset-bottom);
+  background:rgba(9,13,15,.96);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav-item{
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  font-size:9px;
+  min-width:55px;
+}
+
+.nav-item svg{width:20px;height:20px}
+.nav-item.active{color:var(--green)}
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.animate{animation:fadeUp .7s ease both}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+  .desktop-nav{gap:13px}
+  .desktop-nav a{font-size:10px}
+  .steps-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:700px){
+  .container{width:calc(100% - 34px)}
+  .header-inner{height:68px}
+  .desktop-nav{display:none}
+  .header-right>.btn{display:none}
+  .menu-btn{display:block}
+  .mobile-menu{top:68px}
+
+  .hero{padding:70px 0 55px}
+  .hero h1{font-size:clamp(43px,12vw,61px)}
+  .hero-description{font-size:13px}
+  .hero-stats{gap:22px;margin-top:45px}
+  .stat strong{font-size:17px}
+
+  section.content-section{padding:55px 0}
+  .portal-section{padding:10px 0 45px!important}
+  .portal-box{padding:21px}
+  .portal-header{align-items:flex-start;flex-direction:column}
+  .portal-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .portal-card{padding:16px;min-height:155px}
+
+  .services-grid{grid-template-columns:1fr}
+  .service-card{min-height:225px}
+  .steps-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .step-card{padding:17px;min-height:165px}
+  .benefit-grid{grid-template-columns:1fr}
+
+  .tracking-box{
+    align-items:stretch;
+    flex-direction:column;
+    padding:22px;
+  }
+
+  .tracking-box>.btn{width:100%}
+
+  .footer-grid{
+    grid-template-columns:1fr 1fr;
+    gap:30px 20px;
+  }
+
+  .footer-brand{grid-column:1/-1}
+  .footer-bottom{flex-direction:column}
+  .bottom-nav{display:flex}
+  .hero-actions .btn{flex:1}
+}
+
+@media(max-width:370px){
+  .portal-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+  <div class="container header-inner">
+
+    <a href="index.html" class="logo" aria-label="SWARM home">
+      <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="14" y1="104" x2="106" y2="24" stroke="#00E65B" stroke-width="6.5" stroke-linecap="round"/>
+        <polygon points="40,81 74,52 80,86" fill="#121518" stroke="#00E65B" stroke-width="6.5" stroke-linejoin="round"/>
+        <circle cx="52" cy="44" r="4.5" fill="#00E65B"/>
+        <circle cx="38" cy="49" r="3.6" fill="#00E65B"/>
+        <circle cx="43" cy="61" r="2.8" fill="#00E65B"/>
+      </svg>
+      SWARM
+    </a>
+
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="send.html">Send</a>
+      <a href="track.html">Track</a>
+      <a href="history.html">History</a>
+      <a href="support.html">Support</a>
+    </nav>
+
+    <div class="header-right">
+      <a href="send.html" class="btn btn-primary">SEND A PACKAGE →</a>
+
+      <a href="account.html" class="account-btn" aria-label="My account">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21a8 8 0 0 1 16 0"/>
+        </svg>
+      </a>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">☰</button>
+    </div>
+
+  </div>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+    <a href="index.html">Home</a>
+    <a href="send.html">Send a Package</a>
+    <a href="track.html">Track a Shipment</a>
+    <a href="history.html">Delivery History</a>
+    <a href="account.html">My Account</a>
+    <a href="support.html">Help & Support</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+  <div class="container hero-content animate">
+
+    <div class="eyebrow">
+      <span class="live-dot"></span>
+      THE FUTURE OF AERIAL LOGISTICS
+    </div>
+
+    <h1>
+      Your package.<br>
+      <span>Beyond the road.</span>
+    </h1>
+
+    <p class="hero-description">
+      A new approach to package transportation.
+      Discover aerial and cable-based logistics designed
+      to move packages through connected delivery networks.
+    </p>
+
+    <div class="hero-actions">
+      <a href="send.html" class="btn btn-primary">
+        SEND A PACKAGE <span>→</span>
+      </a>
+
+      <a href="track.html" class="btn btn-outline">
+        TRACK SHIPMENT
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <strong>01</strong>
+        <span>Connected platform</span>
+      </div>
+      <div class="stat">
+        <strong>02</strong>
+        <span>Transport technologies</span>
+      </div>
+      <div class="stat">
+        <strong>01</strong>
+        <span>Customer experience</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CUSTOMER PORTAL -->
+
+<section class="content-section portal-section">
+  <div class="container">
+
+    <div class="portal-box">
+
+      <div class="portal-header">
+        <div>
+          <div class="section-label">YOUR SWARM PORTAL</div>
+          <h2>Everything in one place.</h2>
+          <p>Manage your delivery requests, shipments and customer information.</p>
+        </div>
+        <div class="portal-badge">CUSTOMER SERVICES</div>
+      </div>
+
+      <div class="portal-grid">
+
+        <a href="send.html" class="portal-card">
+          <div class="portal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M22 2 11 13"/>
+              <path d="m22 2-7 20-4-9-9-4z"/>
+            </svg>
+          </div>
+          <strong>Send a Package</strong>
+          <span>Start a new delivery request.</span>
+          <div class="portal-arrow">OPEN SERVICE →</div>
+        </a>
+
+        <a href="track.html" class="portal-card">
+          <div class="portal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m16 16 5 5"/>
+            </svg>
+          </div>
+          <strong>Track Shipment</strong>
+          <span>Look up a shipment reference.</span>
+          <div class="portal-arrow">TRACK NOW →</div>
+        </a>
+
+        <a href="history.html" class="portal-card">
+          <div class="portal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M12 7v5l3 2"/>
+            </svg>
+          </div>
+          <strong>Delivery History</strong>
+          <span>View your previous requests.</span>
+          <div class="portal-arrow">VIEW HISTORY →</div>
+        </a>
+
+        <a href="account.html" class="portal-card">
+          <div class="portal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 21a8 8 0 0 1 16 0"/>
+            </svg>
+          </div>
+          <strong>My Account</strong>
+          <span>Manage your personal details.</span>
+          <div class="portal-arrow">OPEN ACCOUNT →</div>
+        </a>
+
+        <a href="support.html" class="portal-card">
+          <div class="portal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-1.2 1-1.7 1.4-1.7 3.2"/>
+              <path d="M12 17.5h.01"/>
+            </svg>
+          </div>
+          <strong>Help & Support</strong>
+          <span>Find answers and get assistance.</span>
+          <div class="portal-arrow">GET HELP →</div>
+        </a>
+
+        <a href="send.html" class="portal-card">
+          <div class="portal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 3v18M3 12h18"/>
+              <circle cx="12" cy="12" r="9"/>
+            </svg>
+          </div>
+          <strong>New Request</strong>
+          <span>Begin another delivery request.</span>
+          <div class="portal-arrow">GET STARTED →</div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+
+<section class="content-section" id="services">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="section-label">OUR TECHNOLOGY</div>
+      <h2>Delivery, reimagined.</h2>
+      <p>
+        Different transportation technologies.
+        One connected delivery experience.
+      </p>
+    </div>
+
+    <div class="services-grid">
+
+      <article class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M5 9 3 7m16 2 2-2M5 15l-2 2m16-2 2 2"/>
+            <rect x="8" y="8" width="8" height="8" rx="2"/>
+            <path d="M3 7h3m12 0h3M3 17h3m12 0h3"/>
+          </svg>
+        </div>
+        <h3>Drone delivery</h3>
+        <p>
+          Aerial transportation designed to move eligible
+          packages between designated pickup and delivery points.
+        </p>
+        <span class="service-tag">AERIAL TRANSPORTATION</span>
+      </article>
+
+      <article class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M3 4 21 20"/>
+            <path d="M9 9l6 6"/>
+            <path d="M7 10 12 5l5 5-5 5z"/>
+            <path d="M12 15v5"/>
+          </svg>
+        </div>
+        <h3>Zipline delivery</h3>
+        <p>
+          Cable-based transportation using dedicated routes
+          and suspended package carriers.
+        </p>
+        <span class="service-tag">CABLE LOGISTICS</span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+
+<section class="content-section" id="how">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="section-label">THE PROCESS</div>
+      <h2>Four steps. One journey.</h2>
+      <p>A simple customer journey from delivery request to destination.</p>
+    </div>
+
+    <div class="steps-grid">
+
+      <article class="step-card">
+        <div class="step-number">01</div>
+        <h3>Request a delivery</h3>
+        <p>Provide your pickup, destination and package details.</p>
+      </article>
+
+      <article class="step-card">
+        <div class="step-number">02</div>
+        <h3>Review your request</h3>
+        <p>Delivery method and availability would be assessed against route requirements.</p>
+      </article>
+
+      <article class="step-card">
+        <div class="step-number">03</div>
+        <h3>Follow your package</h3>
+        <p>Use your shipment reference to access delivery information.</p>
+      </article>
+
+      <article class="step-card">
+        <div class="step-number">04</div>
+        <h3>Delivery completed</h3>
+        <p>Your package reaches its intended recipient once the delivery is fulfilled.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- TRACKING LINK -->
+
+<section class="content-section" id="tracking">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="section-label">SHIPMENT VISIBILITY</div>
+      <h2>Your delivery. In view.</h2>
+      <p>Access the tracking page to look up a shipment reference.</p>
+    </div>
+
+    <div class="tracking-box">
+
+      <div class="tracking-copy">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m16 16 5 5"/>
+        </svg>
+
+        <div>
+          <h3>Have a shipment reference?</h3>
+          <p>
+            Open the SWARM tracking page to enter your reference
+            and view the shipment information available to you.
+          </p>
+        </div>
+      </div>
+
+      <a href="track.html" class="btn btn-primary">
+        OPEN TRACKING →
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+
+<section class="content-section">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="section-label">THE SWARM EXPERIENCE</div>
+      <h2>Built around your delivery.</h2>
+    </div>
+
+    <div class="benefit-grid">
+
+      <article class="benefit-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+        <h3>Controlled logistics</h3>
+        <p>Delivery requests can be assessed against route and package requirements.</p>
+      </article>
+
+      <article class="benefit-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <h3>Delivery visibility</h3>
+        <p>Keep customers informed through shipment status and tracking updates.</p>
+      </article>
+
+      <article class="benefit-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path d="M3 12h18M12 3v18"/>
+          <circle cx="12" cy="12" r="9"/>
+        </svg>
+        <h3>Connected network</h3>
+        <p>Bring aerial and cable transportation together under one customer experience.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+
+<section class="content-section" id="support">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="section-label">HELP CENTRE</div>
+      <h2>Frequently asked questions.</h2>
+      <p>Some things you might want to know about SWARM.</p>
+    </div>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>What is SWARM?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          SWARM is an aerial and cable logistics concept designed
+          to transport packages through alternative delivery networks.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>How does drone delivery work?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          Eligible packages would be transported using designated
+          drone routes, subject to operational availability,
+          safety requirements and applicable aviation regulations.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>What is zipline delivery?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          Zipline delivery uses a suspended cable system to
+          transport packages between designated stations.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Can I track my package?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          The SWARM website is being designed to support shipment
+          tracking. Live tracking will require connected tracking infrastructure.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          <span>Is SWARM currently accepting deliveries?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          This website is currently a demonstration of the planned
+          customer experience. It does not confirm operational
+          delivery availability or arrange real deliveries.
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:25px">
+      <a href="support.html" class="btn btn-outline">
+        VISIT HELP & SUPPORT →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+
+<section class="content-section">
+  <div class="container">
+
+    <div class="final-cta">
+      <div class="section-label">THE NEXT GENERATION OF LOGISTICS</div>
+      <h2>Move beyond <span>ordinary.</span></h2>
+      <p>
+        A new perspective on how packages move.
+        Welcome to SWARM.
+      </p>
+      <a href="send.html" class="btn btn-primary">
+        START A DELIVERY REQUEST →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="14" y1="104" x2="106" y2="24" stroke="#00E65B" stroke-width="6.5" stroke-linecap="round"/>
+            <polygon points="40,81 74,52 80,86" fill="#121518" stroke="#00E65B" stroke-width="6.5" stroke-linejoin="round"/>
+            <circle cx="52" cy="44" r="4.5" fill="#00E65B"/>
+            <circle cx="38" cy="49" r="3.6" fill="#00E65B"/>
+            <circle cx="43" cy="61" r="2.8" fill="#00E65B"/>
+          </svg>
+          SWARM
+        </a>
+        <p>
+          Aerial and cable logistics.
+          A new perspective on package transportation.
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h4>CUSTOMER PORTAL</h4>
+        <a href="send.html">Send a package</a>
+        <a href="track.html">Track shipment</a>
+        <a href="history.html">Delivery history</a>
+        <a href="account.html">My account</a>
+      </div>
+
+      <div class="footer-column">
+        <h4>SUPPORT</h4>
+        <a href="support.html">Help centre</a>
+        <a href="support.html">FAQs</a>
+        <a href="support.html">Contact support</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> SWARM. All rights reserved.</span>
+      <span>AERIAL LOGISTICS · BUILT FOR WHAT'S NEXT.</span>
+    </div>
+
+  </div>
+</footer>
+
+<!-- MOBILE NAV -->
+
+<nav class="bottom-nav" aria-label="Mobile navigation">
+
+  <a href="index.html" class="nav-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/>
+    </svg>
+    Home
+  </a>
+
+  <a href="send.html" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <path d="M22 2 11 13"/>
+      <path d="m22 2-7 20-4-9-9-4z"/>
+    </svg>
+    Send
+  </a>
+
+  <a href="track.html" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <circle cx="11" cy="11" r="7"/>
+      <path d="m16 16 5 5"/>
+    </svg>
+    Track
+  </a>
+
+  <a href="history.html" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+      <path d="M3 3v5h5"/>
+      <path d="M12 7v5l3 2"/>
+    </svg>
+    History
+  </a>
+
+  <a href="account.html" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 21a8 8 0 0 1 16 0"/>
+    </svg>
+    Account
+  </a>
+
+</nav>
+
+<script>
+// MOBILE MENU
+
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+menuBtn.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', isOpen);
+  menuBtn.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+  menuBtn.textContent = isOpen ? '×' : '☰';
+});
+
+// CLOSE MENU AFTER NAVIGATION
+
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.setAttribute('aria-label', 'Open navigation');
+    menuBtn.textContent = '☰';
+  });
+});
+
+// FAQ ACCORDION
+
+document.querySelectorAll('.faq-question').forEach(button => {
+  button.addEventListener('click', () => {
+    const item = button.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+
+    document.querySelectorAll('.faq-item').forEach(faq => {
+      faq.classList.remove('open');
+      faq.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+    });
+
+    if (!isOpen) {
+      item.classList.add('open');
+      button.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+// CURRENT YEAR
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+</script>
+
+</body>
+</html>
+T'S NEXT.</span>
+    </div>
+
+  </div>
+</footer>
+
+<!-- MOBILE NAV -->
+
+<nav class="bottom-nav" aria-label="Mobile navigation">
+
+  <a href="#home" class="nav-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/>
+    </svg>
+    Home
+  </a>
+
+  <a href="#booking" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <path d="M22 2 11 13"/>
+      <path d="m22 2-7 20-4-9-9-4z"/>
+    </svg>
+    Send
+  </a>
+
+  <a href="#tracking" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/>
+      <circle cx="12" cy="10" r="3"/>
+    </svg>
+    Track
+  </a>
+
+  <a href="#support" class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-1.2 1-1.7 1.4-1.7 3.2"/>
+      <path d="M12 17.5h.01"/>
+    </svg>
+    Help
+  </a>
+
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// MOBILE MENU
+
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+menuBtn.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', open);
+  menuBtn.textContent = open ? '×' : '☰';
+});
+
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.textContent = '☰';
+  });
+});
+
+// TOAST NOTIFICATION
+
+let toastTimer;
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3500);
+}
+
+// BOOKING DEMONSTRATION
+
+document.getElementById('bookingForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  if (!this.reportValidity()) return;
+
+  const formData = new FormData(this);
+  const details = {
+    sender: formData.get('sender'),
+    phone: formData.get('phone'),
+    pickup: formData.get('pickup'),
+    destination: formData.get('destination'),
+    package: formData.get('package'),
+    transport: formData.get('transport')
+  };
+
+  console.log('SWARM demonstration booking:', details);
+
+  showToast('Demo only — no delivery request was submitted.');
+});
+
+// TRACKING DEMONSTRATION
+
+document.getElementById('trackingForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const input = document.getElementById('trackingNumber');
+  const result = document.getElementById('trackingResult');
+  const code = input.value.trim();
+
+  if (!code) {
+    showToast('Please enter a tracking reference.');
+    return;
+  }
+
+  document.getElementById('trackingCode').textContent = code;
+  document.getElementById('trackingTitle').textContent = 'DEMO TRACKING';
+
+  result.classList.add('show');
+
+  showToast('Demonstration tracking only — no live shipment found.');
+
+  result.scrollIntoView({
+    behavior: 'smooth',
+    block: 'nearest'
+  });
+});
+
+// FAQ ACCORDION
+
+document.querySelectorAll('.faq-question').forEach(button => {
+  button.addEventListener('click', () => {
+    const item = button.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+
+    document.querySelectorAll('.faq-item').forEach(faq => {
+      faq.classList.remove('open');
+    });
+
+    if (!isOpen) {
+      item.classList.add('open');
+    }
+  });
+});
+
+// ACTIVE NAVIGATION
+
+const sections = document.querySelectorAll('main section[id]');
+const navLinks = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => {
+        link.classList.toggle(
+          'active',
+          link.getAttribute('href') === '#' + entry.target.id
+        );
+      });
+    }
+  });
+}, {
+  rootMargin: '-30% 0px -60% 0px'
+});
+
+sections.forEach(section => observer.observe(section));
+
+// CURRENT YEAR
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+</script>
+
+</body>
+</html>

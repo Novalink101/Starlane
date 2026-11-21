@@ -1,0 +1,618 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help & Support | SWARM</title>
+
+<style>
+:root{
+  --bg:#050608;
+  --panel:rgba(18,22,28,.84);
+  --green:#00FF66;
+  --muted:#8B9BB4;
+  --border:rgba(255,255,255,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:var(--bg);
+  color:#fff;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+  padding-bottom:100px;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(0,255,102,.08),transparent 48%),
+    repeating-linear-gradient(45deg,#111 0px,#111 1px,transparent 1px,transparent 12px);
+  opacity:.4;
+}
+
+.container{max-width:520px;margin:auto;padding:0 20px}
+
+header{
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+
+.logo{font-size:20px;font-weight:900;letter-spacing:4px}
+.logo span{color:var(--green)}
+.back{color:var(--muted);font-size:12px;text-decoration:none}
+
+.hero{padding:30px 0 25px}
+
+.eyebrow{
+  color:var(--green);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  margin-bottom:12px;
+}
+
+h1{font-size:34px;line-height:1.15;margin-bottom:12px}
+h1 span{color:var(--green)}
+
+.hero p{color:var(--muted);font-size:13px;line-height:1.6}
+
+.support-banner{
+  background:linear-gradient(135deg,rgba(0,255,102,.12),rgba(18,22,28,.94));
+  border:1px solid rgba(0,255,102,.2);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.banner-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.banner-label{
+  color:var(--green);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.banner-icon{
+  width:37px;height:37px;
+  border:1px solid rgba(0,255,102,.3);
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  color:var(--green);
+  font-size:19px;
+}
+
+.support-banner h2{font-size:17px;margin-bottom:8px}
+.support-banner p{font-size:11px;color:var(--muted);line-height:1.6}
+
+.section{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:19px;
+  margin-bottom:15px;
+}
+
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:17px;
+}
+
+.section-heading h2{font-size:15px}
+.section-heading span{font-size:9px;color:var(--muted)}
+
+.search{
+  width:100%;
+  background:#090D11;
+  border:1px solid var(--border);
+  border-radius:11px;
+  color:white;
+  padding:14px;
+  font:inherit;
+  font-size:12px;
+  outline:none;
+  margin-bottom:15px;
+}
+
+.search:focus{border-color:var(--green)}
+
+.faq{
+  border-top:1px solid var(--border);
+}
+
+.faq-item{padding:15px 0}
+.faq-question{
+  width:100%;
+  background:none;
+  border:0;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+  font-size:12px;
+  font-weight:700;
+}
+
+.faq-question span:last-child{
+  color:var(--green);
+  font-size:18px;
+  flex:none;
+}
+
+.faq-answer{
+  display:none;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+  padding:12px 20px 0 0;
+}
+
+.faq-item.open .faq-answer{display:block}
+.faq-item.open .faq-question span:last-child{transform:rotate(45deg)}
+
+.categories{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.category{
+  background:#090D11;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:15px 12px;
+  text-decoration:none;
+  color:white;
+  min-height:105px;
+}
+
+.category-icon{
+  color:var(--green);
+  font-size:20px;
+  margin-bottom:12px;
+}
+
+.category strong{font-size:11px;display:block;margin-bottom:5px}
+.category small{font-size:9px;color:var(--muted);line-height:1.5;display:block}
+
+.field{margin-bottom:14px}
+
+label{
+  display:block;
+  color:#C6D0DC;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.7px;
+  margin-bottom:8px;
+}
+
+input,select,textarea{
+  width:100%;
+  background:#090D11;
+  border:1px solid var(--border);
+  border-radius:11px;
+  color:white;
+  padding:14px;
+  font:inherit;
+  font-size:12px;
+  outline:none;
+}
+
+input:focus,select:focus,textarea:focus{border-color:var(--green)}
+input::placeholder,textarea::placeholder{color:#566173}
+select option{background:#10151A}
+
+.primary{
+  width:100%;
+  background:var(--green);
+  color:#001A09;
+  border:0;
+  border-radius:11px;
+  padding:15px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.8px;
+}
+
+.message{
+  display:none;
+  margin-top:12px;
+  color:var(--green);
+  font-size:11px;
+  line-height:1.6;
+}
+
+.contact-row{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.contact-row:last-child{border:0;padding-bottom:0}
+
+.contact-icon{
+  width:39px;height:39px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:rgba(0,255,102,.08);
+  color:var(--green);
+  font-size:17px;
+}
+
+.contact-info{min-width:0;flex:1}
+.contact-info strong{font-size:11px;display:block}
+.contact-info small{font-size:10px;color:var(--muted);display:block;margin-top:5px}
+
+.contact-info a{color:var(--green);text-decoration:none}
+
+.notice{
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+  padding:20px 5px;
+}
+
+.empty-search{
+  display:none;
+  font-size:11px;
+  color:var(--muted);
+  padding:15px 0;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  background:rgba(10,13,17,.96);
+  backdrop-filter:blur(15px);
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-around;
+  padding:14px 10px calc(14px + env(safe-area-inset-bottom));
+  z-index:5;
+}
+
+.bottom-nav a{
+  color:var(--muted);
+  font-size:11px;
+  text-align:center;
+  text-decoration:none;
+}
+
+.bottom-nav a.active{color:var(--green)}
+
+@media(max-width:360px){
+  .container{padding:0 15px}
+  h1{font-size:29px}
+  .section{padding:16px}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <div class="logo">SW<span>A</span>RM</div>
+  <a href="index.html" class="back">← Home</a>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">SWARM LOGISTICS / CUSTOMER CARE</div>
+  <h1>We're here<br>to <span>help.</span></h1>
+  <p>Find answers, get help with your shipment, or send our team a support request.</p>
+</section>
+
+<section class="support-banner">
+  <div class="banner-top">
+    <div class="banner-label">SWARM CUSTOMER SUPPORT</div>
+    <div class="banner-icon">?</div>
+  </div>
+  <h2>Need a hand?</h2>
+  <p>Choose a support topic below or send us a message. Our support system will be connected to the SWARM operations team.</p>
+</section>
+
+<!-- SUPPORT CATEGORIES -->
+<section class="section">
+  <div class="section-heading">
+    <h2>What do you need help with?</h2>
+    <span>SUPPORT CENTRE</span>
+  </div>
+
+  <div class="categories">
+    <a href="#contactForm" class="category" data-topic="Shipment tracking">
+      <div class="category-icon">◎</div>
+      <strong>Tracking a shipment</strong>
+      <small>Find a package or check its status.</small>
+    </a>
+
+    <a href="#contactForm" class="category" data-topic="Delayed shipment">
+      <div class="category-icon">◷</div>
+      <strong>Delayed shipment</strong>
+      <small>Ask about a delivery delay.</small>
+    </a>
+
+    <a href="#contactForm" class="category" data-topic="Booking assistance">
+      <div class="category-icon">＋</div>
+      <strong>Booking assistance</strong>
+      <small>Get help with a shipment request.</small>
+    </a>
+
+    <a href="#contactForm" class="category" data-topic="Other issue">
+      <div class="category-icon">↗</div>
+      <strong>Something else</strong>
+      <small>Tell us what you need.</small>
+    </a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="section-heading">
+    <h2>Frequently asked questions</h2>
+    <span>FAQ</span>
+  </div>
+
+  <input class="search" id="faqSearch" placeholder="Search for an answer...">
+
+  <div class="faq" id="faqList">
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>How do I send a package?</span><span>+</span>
+      </button>
+      <div class="faq-answer">
+        Open the Send page, enter your collection and destination addresses, provide the package details and choose a preferred delivery method. Submit your request to continue. Actual bookings require SWARM's operational booking system to be connected.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>How do I track my shipment?</span><span>+</span>
+      </button>
+      <div class="faq-answer">
+        Open the Track page and enter your shipment reference. The current prototype can display locally saved demo requests. Live location updates will require GPS and backend integration.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>What is the difference between Drone and Zipline?</span><span>+</span>
+      </button>
+      <div class="faq-answer">
+        Drone delivery uses an aerial vehicle. Zipline delivery uses a pod or carrier travelling along a cable system. Availability depends on the routes, infrastructure, equipment and operational approvals SWARM establishes.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>Can I change my delivery address?</span><span>+</span>
+      </button>
+      <div class="faq-answer">
+        Contact SWARM support with your shipment reference and the corrected address. Address changes may not be possible after a shipment has entered an operational stage.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>What packages can I send?</span><span>+</span>
+      </button>
+      <div class="faq-answer">
+        Permitted package types and weight limits will depend on the delivery method, vehicle capacity, safety requirements and applicable regulations. Restricted or dangerous goods may not be accepted.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>Is the delivery price final?</span><span>+</span>
+      </button>
+      <div class="faq-answer">
+        No. Prices shown in the current website prototype are illustrative. A confirmed price will depend on route distance, package size and weight, delivery availability and operational costs.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>What happens if my package is damaged?</span><span>+</span>
+      </button>
+      <div class="faq-answer">
+        Contact SWARM support as soon as possible. Include your shipment reference, a description of the issue and any relevant photographs. A formal claims process and applicable policies must be established before live operations begin.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="empty-search" id="emptySearch">No matching questions found.</div>
+</section>
+
+<!-- CONTACT FORM -->
+<section class="section" id="contactForm">
+  <div class="section-heading">
+    <h2>Send a support request</h2>
+    <span>CONTACT FORM</span>
+  </div>
+
+  <form id="supportForm">
+
+    <div class="field">
+      <label for="customerName">YOUR NAME</label>
+      <input id="customerName" required placeholder="Full name">
+    </div>
+
+    <div class="field">
+      <label for="customerEmail">EMAIL ADDRESS</label>
+      <input id="customerEmail" type="email" required placeholder="you@example.com">
+    </div>
+
+    <div class="field">
+      <label for="topic">SUPPORT CATEGORY</label>
+      <select id="topic" required>
+        <option value="">Choose a topic</option>
+        <option>Shipment tracking</option>
+        <option>Delayed shipment</option>
+        <option>Booking assistance</option>
+        <option>Damaged package</option>
+        <option>Account assistance</option>
+        <option>Payment question</option>
+        <option>General enquiry</option>
+        <option>Other issue</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="reference">SHIPMENT REFERENCE (OPTIONAL)</label>
+      <input id="reference" placeholder="SWM-XXXXXXXX">
+    </div>
+
+    <div class="field">
+      <label for="message">HOW CAN WE HELP?</label>
+      <textarea id="message" rows="5" required placeholder="Describe your issue or question..."></textarea>
+    </div>
+
+    <button type="submit" class="primary">PREPARE SUPPORT REQUEST →</button>
+
+    <p class="message" id="formMessage"></p>
+  </form>
+</section>
+
+<!-- CONTACT OPTIONS -->
+<section class="section">
+  <div class="section-heading">
+    <h2>Contact information</h2>
+    <span>GET IN TOUCH</span>
+  </div>
+
+  <div class="contact-row">
+    <div class="contact-icon">@</div>
+    <div class="contact-info">
+      <strong>Email support</strong>
+      <small>Connect your official SWARM support email here.</small>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="contact-icon">◷</div>
+    <div class="contact-info">
+      <strong>Support hours</strong>
+      <small>Operating hours to be announced.</small>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div class="contact-icon">⌖</div>
+    <div class="contact-info">
+      <strong>Service coverage</strong>
+      <small>Service areas to be confirmed as SWARM operations develop.</small>
+    </div>
+  </div>
+</section>
+
+<p class="notice">
+  SWARM AERIAL LOGISTICS<br>
+  Thank you for being part of the journey.
+</p>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="index.html">⌂<br>Home</a>
+  <a href="send.html">＋<br>Send</a>
+  <a href="track.html">◎<br>Track</a>
+  <a href="history.html">◷<br>History</a>
+</nav>
+
+<script>
+// FAQ accordion
+document.querySelectorAll(".faq-question").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const item=button.closest(".faq-item");
+    item.classList.toggle("open");
+  });
+});
+
+// FAQ search
+document.getElementById("faqSearch").addEventListener("input",e=>{
+  const query=e.target.value.toLowerCase().trim();
+  let visible=0;
+
+  document.querySelectorAll(".faq-item").forEach(item=>{
+    const matches=item.textContent.toLowerCase().includes(query);
+    item.style.display=matches?"block":"none";
+    if(matches)visible++;
+  });
+
+  document.getElementById("emptySearch").style.display=
+    visible?"none":"block";
+});
+
+// Category shortcuts
+document.querySelectorAll(".category").forEach(link=>{
+  link.addEventListener("click",()=>{
+    document.getElementById("topic").value=link.dataset.topic;
+  });
+});
+
+// Pre-fill customer information if a local profile exists.
+try{
+  const profile=JSON.parse(localStorage.getItem("swarmProfile")||"{}");
+  if(profile.name)document.getElementById("customerName").value=profile.name;
+  if(profile.email)document.getElementById("customerEmail").value=profile.email;
+}catch(e){}
+
+// Prepare an email request using the customer's email application.
+// No support message is transmitted by this demo form.
+document.getElementById("supportForm").addEventListener("submit",e=>{
+  e.preventDefault();
+
+  const name=document.getElementById("customerName").value.trim();
+  const email=document.getElementById("customerEmail").value.trim();
+  const topic=document.getElementById("topic").value;
+  const reference=document.getElementById("reference").value.trim();
+  const message=document.getElementById("message").value.trim();
+
+  const subject="SWARM Support: "+topic;
+  const body=
+`Name: ${name}
+Email: ${email}
+Category: ${topic}
+Shipment reference: ${reference||"Not provided"}
+
+Message:
+${message}`;
+
+  const mailto=
+    "mailto:?subject="+encodeURIComponent(subject)+
+    "&body="+encodeURIComponent(body);
+
+  const output=document.getElementById("formMessage");
+  output.textContent="Your email application will open with your support request prepared. SWARM has not received it yet.";
+  output.style.display="block";
+
+  window.location.href=mailto;
+});
+</script>
+
+</body>
+</html>
