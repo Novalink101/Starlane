@@ -145,30 +145,12 @@ function zones(){for(const z of V.zones){const g=z.shape=='oval'?Array.from({len
   ctx.fillStyle='#e8f1fb';ctx.font='700 '+fs+'px Outfit,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(z.id+(left(z)?'  R'+z.price:'  sold out')+(z.qty?'  x'+z.qty:''),(x0+x1)/2,(y0+y1)/2)}
  for(const m of V.marks)if(!(m.h>0))face(pj(rc(m.x,m.z,m.w,m.d,.03)),m.color,m.text)}
 function mark(m){const x0=m.x-m.w/2,x1=m.x+m.w/2,z0=m.z-m.d/2,z1=m.z+m.d/2,h=m.h;
- contactShadow(m.x,m.z,m.w*.6,m.d*.6,.5);
  for(const[ax,az,bx,bz,nx,nz]of[[x0,z1,x1,z1,0,1],[x0,z0,x1,z0,0,-1],[x1,z0,x1,z1,1,0],[x0,z0,x0,z1,-1,0]])if((cx_-(ax+bx)/2)*nx+(cz_-(az+bz)/2)*nz>0){const f=pj([[ax,0,az],[bx,0,bz],[bx,h,bz],[ax,h,az]]);if(f.every(Boolean))poly(f,sh(hx(m.color),.65))}
  face(pj([[x0,h,z0],[x1,h,z0],[x1,h,z1],[x0,h,z1]]),m.color,m.text)}
-function table(t){
-  const L=V.look,hv=hov===t&&!t.sold,hw=t.tw/2,hl=t.tl/2;
-  const rg=t.shape=='round'?Array.from({length:20},(_,i)=>[Math.sin(i/20*6.2832)*hw,Math.cos(i/20*6.2832)*hw]):[[-hw,-hl],[hw,-hl],[hw,hl],[-hw,hl]];
-  const f=pj(rg.map(p=>[t.x+p[0],t.y,t.z+p[1]])), tp=pj(rg.map(p=>[t.x+p[0],t.y+.8,t.z+p[1]]));
-  if(f.every(Boolean))poly(f,'rgba(0,0,0,.35)');
-  if(!tp.every(Boolean))return;
-  contactShadow(t.x,t.z,hw*1.4,hl*1.4,.55);
-  let base=t.sel?hx2(L.sel):t.sold?hx2(L.soldc):hv?hx2(t.k[2]):hx2(t.k[1]);
-  base=fogC(base,t.d);
-  poly(tp,rgba(base,1));
-  if(t.shape=='round'){
-    const cr=tp.reduce((s,p)=>[s[0]+p[0],s[1]+p[1]],[0,0]); cr[0]/=tp.length;cr[1]/=tp.length;
-    let R=0;for(const p of tp)R=Math.max(R,Math.hypot(p[0]-cr[0],p[1]-cr[1]));
-    const gg=ctx.createRadialGradient(cr[0]-R*.3,cr[1]-R*.3,R*.1,cr[0],cr[1],R);
-    gg.addColorStop(0,rgba(shadeC(base,1.4),.9));
-    gg.addColorStop(.7,rgba(base,.9));
-    gg.addColorStop(1,rgba(shadeC(base,.6),1));
-    ctx.fillStyle=gg; ctx.beginPath(); tp.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.closePath(); ctx.fill();
-  }
-  ctx.strokeStyle=t.sel?'#fff':rgba(shadeC(base,.5),1); ctx.lineWidth=1.5; ctx.stroke();
-  const c=pp(t.x,t.y+.8,t.z),fs=foc/t.d*.5;if(c&&fs>6){ctx.fillStyle='#e8f1fb';ctx.font='700 '+Math.min(fs,16)+'px Outfit,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t.short,c[0],c[1])}}
+function table(t){const L=V.look,hv=hov===t&&!t.sold,hw=t.tw/2,hl=t.tl/2,rg=t.shape=='round'?Array.from({length:20},(_,i)=>[Math.sin(i/20*6.2832)*hw,Math.cos(i/20*6.2832)*hw]):[[-hw,-hl],[hw,-hl],[hw,hl],[-hw,hl]];
+ const f=pj(rg.map(p=>[t.x+p[0],t.y,t.z+p[1]])),tp=pj(rg.map(p=>[t.x+p[0],t.y+.8,t.z+p[1]]));if(f.every(Boolean))poly(f,'rgba(0,0,0,.35)');if(!tp.every(Boolean))return;t.pts=tp;
+ poly(tp,t.sel?L.sel:t.sold?L.soldc:hv?t.k[2]:t.k[1]);ctx.strokeStyle=t.sel?'#fff':t.k[0];ctx.lineWidth=2;ctx.stroke();
+ const c=pp(t.x,t.y+.8,t.z),fs=foc/t.d*.5;if(c&&fs>6){ctx.fillStyle='#e8f1fb';ctx.font='700 '+Math.min(fs,16)+'px Outfit,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t.short,c[0],c[1])}}
 function applyLook(){const L=V.look;document.body.style.background=L.bg;document.documentElement.style.setProperty('--cy',L.sel);L.selb=sh(hx(L.sel),.7);L.soldb=sh(hx(L.soldc),.65);$('vn').textContent=L.name+(L.date?', '+L.date:'')}
 function setV(o){if(!Array.isArray(o.secs)||!o.secs.length||!Array.isArray(o.tiers)||!o.tiers.length)throw 0;V={type:o.type||'custom',screen:{...PRE.custom.screen,...o.screen},tiers:o.tiers,secs:o.secs.map(s=>sc(s)),look:{...DL,...o.look},zones:o.zones||[],marks:o.marks||[],promos:o.promos||[],names:o.names||{}};selId=V.secs[0].id;selT=V.tiers[0].name;zi=mi=0;lastSeat=null;promo='';seats=[];applyLook();build();fit();renderDz();upd();go()}
 function leg(){$('leg').innerHTML=V.tiers.map(t=>'<span><i style="background:'+t.color+'"></i>'+t.name+'</span>').join('')+'<span><i style="background:'+V.look.soldc+'"></i>Sold</span><span><i style="background:'+V.look.sel+'"></i>Selected</span>'}
@@ -204,48 +186,7 @@ function setup(){const cp=Math.cos(cam.pit),sp=Math.sin(cam.pit);
 function P(x,y,z){const dx=x-cx_,dy=y-cy_,dz=z-cz_,d=dx*fx+dy*fy+dz*fz;if(d<1)return false;
  px=W/2+(dx*rx+dz*rz)/d*foc;py=H*(W<820?.4:.52)-(dx*ux+dy*uy+dz*uz)/d*foc;pd=d;return true}
 const pp=(x,y,z)=>P(x,y,z)?[px,py]:null,pj=a=>a.map(v=>pp(...v));
-
-/* ---------------- REALISTIC RENDERING HELPERS ---------------- */
-const lerp=(a,b,t)=>a+(b-a)*t;
-const mixc=(c1,c2,t)=>[0,1,2].map(i=>Math.round(lerp(c1[i],c2[i],t)));
-const hx2=h=>hx(h);
-const rgba=(c,a)=>'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';
-const clamp01=v=>v<0?0:v>1?1:v;
-const shadeC=(c,k)=>c.map(v=>Math.max(0,Math.min(255,Math.round(v*k))));
-function fogC(c,d){const bg=hx2(V.look.bg);const t=clamp01((d-foc*.9)/(foc*6.5));return mixc(c,bg,t*.55)}
-function contactShadow(x,z,radX,radZ,strength){
-  const y=.02,pts=[],N=16;
-  for(let i=0;i<N;i++){const a=i/N*6.2832;pts.push([x+Math.sin(a)*radX,y,z+Math.cos(a)*radZ])}
-  const P2=pj(pts);if(!P2.every(Boolean))return;
-  let c=[0,0];for(const p of P2){c[0]+=p[0];c[1]+=p[1]}c[0]/=N;c[1]/=N;
-  let R=0;for(const p of P2)R=Math.max(R,Math.hypot(p[0]-c[0],p[1]-c[1]));
-  if(R<2)return;
-  const g=ctx.createRadialGradient(c[0],c[1],0,c[0],c[1],R);
-  g.addColorStop(0,'rgba(0,0,0,'+(strength||.45)+')');
-  g.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=g;ctx.beginPath();ctx.arc(c[0],c[1],R,0,6.2832);ctx.fill();
-}
-function lightCone(sx,sy,sz,tx,tz,radius,color,alpha){
-  const src=pp(sx,sy,sz);if(!src)return;
-  const N=20,ring=[];
-  for(let i=0;i<=N;i++){const a=i/N*6.2832;ring.push(pp(tx+Math.sin(a)*radius,.05,tz+Math.cos(a)*radius))}
-  if(!ring.every(Boolean))return;
-  ctx.save();ctx.globalCompositeOperation='lighter';
-  const cg=ctx.createRadialGradient(src[0],src[1],0,src[0],src[1],Math.max(40,radius*foc/src[2]));
-  cg.addColorStop(0,rgba(color,alpha));cg.addColorStop(1,rgba(color,0));
-  ctx.fillStyle=cg;ctx.beginPath();ctx.moveTo(ring[0][0],ring[0][1]);
-  for(const p of ring)ctx.lineTo(p[0],p[1]);ctx.closePath();ctx.fill();
-  for(let i=0;i<N;i+=2){
-    const a=ring[i],b=ring[(i+1)%N];
-    const g=ctx.createLinearGradient(src[0],src[1],(a[0]+b[0])/2,(a[1]+b[1])/2);
-    g.addColorStop(0,rgba(color,alpha*.5));g.addColorStop(1,rgba(color,0));
-    ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(src[0],src[1]);ctx.lineTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.closePath();ctx.fill();
-  }
-  ctx.restore();
-}
-/* ------------------------------------------------------------- */
-
-function poly(a,f,g){ctx.beginPath();a.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();if(g)ctx.fillStyle=g;else ctx.fillStyle=f;ctx.fill()}
+function poly(a,f){ctx.beginPath();a.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fillStyle=f;ctx.fill()}
 function face(pts,bg,txt,img){if(!pts.every(Boolean))return;poly(pts,bg);
  const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]),x0=Math.min(...xs),y0=Math.min(...ys),w=Math.max(...xs)-x0,h=Math.max(...ys)-y0;
  if(img){ctx.save();ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.clip();ctx.drawImage(img,x0,y0,w,h);ctx.restore()}
@@ -255,100 +196,29 @@ function screen(){const c=V.screen,x=c.w/2,h=c.h,t=c.type;
   const f=pj([[-x,-.2,4],[x,-.2,4],[x,1.2,4],[-x,1.2,4]]),u=pj([[-x,1.2,-4],[x,1.2,-4],[x,1.2,4],[-x,1.2,4]]);
   if(f.every(Boolean))poly(f,'#0e1a2c');if(u.every(Boolean))poly(u,'#1a2c46')}
  else if(t=='cinema')face(pj([[-x,.6,-2],[x,.6,-2],[x,.6+h,-2],[-x,.6+h,-2]]),c.bg,c.text,c.img);
- else if(t=='field')face(pj([[-x,0,-h/2],[x,0,-h/2],[x,0,h/2],[-x,0,h/2]]),c.bg,c.text,c.img);
- // bloom behind stage
- if(c.img||t=='stage'||t=='cinema'){
-  const g=hx2(V.look.glow);
-  const ctr=pp(0,c.h/2+1,-4);
-  if(ctr){ctx.save();ctx.globalCompositeOperation='lighter';
-   const R=foc*.5;const bg=ctx.createRadialGradient(ctr[0],ctr[1],0,ctr[0],ctr[1],R);
-   bg.addColorStop(0,rgba(g,.25));bg.addColorStop(1,rgba(g,0));
-   ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);ctx.restore()}}
-}
-function seat(s){
-  const L=V.look, sz=foc/s.d*s.q;
-  const hv=(hov===s||hov===s.tbl)&&!s.sold;
-  if(sz<2.3){
-    let c=s.sel?hx2(L.sel):s.sold?hx2(L.soldc):hv?hx2(s.k[2]):hx2(s.k[0]);
-    c=fogC(c,s.d);
-    ctx.fillStyle=rgba(c,1);
-    ctx.fillRect(s.sx-sz,s.sy-sz,sz*2,sz*2);
-    return;
-  }
-  const c=Math.cos(s.th),n=Math.sin(s.th),q=s.q,h=.9;
-  const co=(a,b,y)=>pp(s.x+(c*a+n*b)*q,y,s.z+(-n*a+c*b)*q);
-  const A=co(-1,-1,s.y),B=co(1,-1,s.y),C=co(1,1,s.y),D=co(-1,1,s.y),
-        E=co(-1,1,s.y+h),F=co(1,1,s.y+h);
-  if(!(A&&B&&C&&D&&E&&F))return;
-  if(sz>7 && ((s.x*7|0)%3)===0) contactShadow(s.x,s.z,.5*q,.5*q,.35);
-  let topBase=s.sel?hx2(L.sel):s.sold?hx2(L.soldc):hv?hx2(s.k[2]):hx2(s.k[0]);
-  let sideBase=shadeC(topBase,.55);
-  const lightDir=[.35,-.9,.25];
-  const lam=Math.max(0,lightDir[1]);
-  topBase=shadeC(topBase,.7+.5*lam);
-  topBase=fogC(topBase,s.d); sideBase=fogC(sideBase,s.d);
-  const tf=[A,B,C,D];
-  const xs=tf.map(p=>p[0]),ys=tf.map(p=>p[1]);
-  const g=ctx.createLinearGradient(Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys));
-  g.addColorStop(0,rgba(shadeC(topBase,1.12),1));
-  g.addColorStop(1,rgba(shadeC(topBase,.85),1));
-  if((cx_-s.x)*n+(cz_-s.z)*c>0){
-    poly([D,C,F,E],rgba(sideBase,1));
-    poly([A,B,C,D],null,g);
-    if(sz>5 && !s.sold){ctx.fillStyle='rgba(255,255,255,.18)';ctx.beginPath();ctx.arc(A[0]*.6+B[0]*.4,Math.min(...ys)+(Math.max(...ys)-Math.min(...ys))*.25,Math.max(1,sz*.18),0,6.2832);ctx.fill()}
-  }else{
-    poly([A,B,C,D],null,g);
-    poly([D,C,F,E],rgba(sideBase,1));
-  }
-}
+ else if(t=='field')face(pj([[-x,0,-h/2],[x,0,-h/2],[x,0,h/2],[-x,0,h/2]]),c.bg,c.text,c.img)}
+function seat(s){const L=V.look,sz=foc/s.d*s.q;
+ if(sz<2.3){ctx.fillStyle=s.sel?L.sel:s.sold?L.soldc:hov===s||hov===s.tbl?s.k[2]:s.k[0];ctx.fillRect(s.sx-sz,s.sy-sz,sz*2,sz*2);return}
+ const c=Math.cos(s.th),n=Math.sin(s.th),q=s.q,h=.9;
+ const co=(a,b,y)=>pp(s.x+(c*a+n*b)*q,y,s.z+(-n*a+c*b)*q);
+ const A=co(-1,-1,s.y),B=co(1,-1,s.y),C=co(1,1,s.y),D=co(-1,1,s.y),E=co(-1,1,s.y+h),F=co(1,1,s.y+h);
+ if(!(A&&B&&C&&D&&E&&F))return;const hv=(hov===s||hov===s.tbl)&&!s.sold;
+ const k=s.k,top=s.sel?L.sel:s.sold?L.soldc:hv?k[2]:k[0],bk=s.sel?L.selb:s.sold?L.soldb:hv?k[3]:k[1];
+ if((cx_-s.x)*n+(cz_-s.z)*c>0){poly([A,B,C,D],top);poly([D,C,F,E],bk)}else{poly([D,C,F,E],bk);poly([A,B,C,D],top)}}
 function labels(){if(V.look.labels!='1')return;ctx.font='700 14px Outfit,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
  for(const k in secs){const e=secs[k],a=e.a*Math.PI/180,r=e.r0-2.4,p=pp(r*Math.sin(a)+e.ox,e.base+.6,r*Math.cos(a)+e.oz);if(!p)continue;
   ctx.fillStyle='rgba(5,11,22,.88)';ctx.beginPath();ctx.roundRect(p[0]-15,p[1]-13,30,26,8);ctx.fill();ctx.strokeStyle=e.col;ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#e8f1fb';ctx.fillText(k,p[0],p[1]+1)}}
-function frame(){
-  need=0;
-  ctx.clearRect(0,0,W,H);
-  const bgc=hx2(V.look.bg);
-  const sky=ctx.createLinearGradient(0,0,0,H);
-  sky.addColorStop(0,rgba(shadeC(bgc,1.35),1));
-  sky.addColorStop(.55,rgba(bgc,1));
-  sky.addColorStop(1,rgba(shadeC(bgc,.55),1));
-  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-
-  setup();
-
-  const scr=V.screen;
-  if(scr.type!=='none'){
-    const glow=hx2(V.look.glow);
-    const frontZ=scr.type==='stage'?-3:scr.type==='cinema'?-1:0;
-    lightCone(0,4.5,frontZ,0,14,26,glow,.20);
-    lightCone(0,4.5,frontZ,-14,20,16,glow,.10);
-    lightCone(0,4.5,frontZ, 14,20,16,glow,.10);
-  }
-
-  screen();
-  zones();
-
-  vis=[];
-  for(const s of seats)if(P(s.x,s.y+.3,s.z)){s.sx=px;s.sy=py;s.d=pd;vis.push(s)}
-  for(const t of tables)if(P(t.x,t.y+.8,t.z)){t.sx=px;t.sy=py;t.d=pd;vis.push(t)}
-  vis.sort((a,b)=>b.d-a.d);
-
-  const dr=vis.slice();
-  for(const m of V.marks)if(m.h>0&&P(m.x,m.h/2,m.z)){m.dp=pd;dr.push(m)}
-  dr.sort((a,b)=>(b.type?b.dp:b.d)-(a.type?a.dp:a.d));
-  for(const s of dr) s.isT?table(s):s.type?mark(s):seat(s);
-
-  labels();
-
-  const vg=ctx.createRadialGradient(W/2,H*.55,H*.3,W/2,H*.55,H*.85);
-  vg.addColorStop(0,'rgba(0,0,0,0)');
-  vg.addColorStop(1,'rgba(0,0,0,.35)');
-  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
-
-  const t=$('tip');
-  if(hov&&(hov.cap||vis.includes(hov))){t.style.display='block';t.style.left=hov.sx+'px';t.style.top=(hov.sy-8)+'px';
-   t.innerHTML=tipH(hov)}else t.style.display='none';
-}
+function frame(){need=0;ctx.clearRect(0,0,W,H);setup();
+ if(P(0,5,0)){const R=34*foc/pd,g=ctx.createRadialGradient(px,py,0,px,py,R);const gc=hx(V.look.glow).join();g.addColorStop(0,'rgba('+gc+',.5)');g.addColorStop(1,'rgba('+gc+',0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
+ screen();zones();vis=[];
+ for(const s of seats)if(P(s.x,s.y+.3,s.z)){s.sx=px;s.sy=py;s.d=pd;vis.push(s)}
+ for(const t of tables)if(P(t.x,t.y+.8,t.z)){t.sx=px;t.sy=py;t.d=pd;vis.push(t)}
+ vis.sort((a,b)=>b.d-a.d);
+ const dr=vis.slice();for(const m of V.marks)if(m.h>0&&P(m.x,m.h/2,m.z)){m.dp=pd;dr.push(m)}
+ dr.sort((a,b)=>(b.type?b.dp:b.d)-(a.type?a.dp:a.d));for(const s of dr)s.isT?table(s):s.type?mark(s):seat(s);labels();
+ const t=$('tip');
+ if(hov&&(hov.cap||vis.includes(hov))){t.style.display='block';t.style.left=hov.sx+'px';t.style.top=(hov.sy-8)+'px';
+  t.innerHTML=tipH(hov)}else t.style.display='none'}
 const go=()=>{if(!need){need=1;requestAnimationFrame(()=>need&&frame())}};
 function hit(mx,my){let b=null;for(let i=vis.length-1;i>=0;i--){const s=vis[i];
  if(s.isT){if(s.per&&s.pts&&inP(s.pts,mx,my)){b=s;break}}else if(Math.hypot(s.sx-mx,s.sy-my)<Math.max(6,foc/s.d*.5)){b=s.tbl&&s.tbl.per?s.tbl:s;break}}
